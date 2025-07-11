@@ -72,9 +72,9 @@ class CustomArgumentParser(argparse.ArgumentParser):
             else f"python3 ./{self.prog} <source> <target>"
         )
         example_cmd = (
-            f"python {self.prog} downloads\\sources downloads\\sorted"
+            f"python {self.prog} path\\to\\sources\\dir path\\to\\target\\dir"
             if is_windows
-            else f"python3 ./{self.prog} ./downloads/sources ./downloads/sorted"
+            else f"python3 ./{self.prog} ./path/to/sources/dir ./path/to/target/dir"
         )
         return "\n".join(
             [
