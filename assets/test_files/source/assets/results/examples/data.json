@@ -1,0 +1,46 @@
+{
+  "2025-06-28 10:02:01.000001": {
+    "username": "Yulia",
+    "message": "Hi! I’m interested in the Python Web course — how much does it cost? 💸"
+  },
+  "2025-06-28 10:03:15.000002": {
+    "username": "🛡️ Admin Mike (Sales Team)",
+    "message": "> Yulia\n>how much does it cost?\n\nHi Yulia! 😊 Please send a quick request to **support@pythoncourses.example** and we’ll get back with full pricing details and current offers."
+  },
+  "2025-06-28 10:04:30.000003": {
+    "username": "Yulia",
+    "message": "Thanks! I actually sent it yesterday and just waiting for the reply now 🙂"
+  },
+  "2025-06-28 11:10:00.000004": {
+    "username": "Andriy",
+    "message": "When does the next Python Core course start?"
+  },
+  "2025-06-28 11:11:55.000005": {
+    "username": "🛡️ Admin Mike (Sales Team)",
+    "message": "> Andriy\n>When does the next Python Core course start?\n\nHi! We have two groups coming up: one on **July 1** and another on **July 15**. Feel free to email **support@pythoncourses.example** to pick your preferred group. Just so you know — the July 1 group starts in just **3 days**, and sign-ups today come with a small bonus discount 😉"
+  },
+  "2025-06-28 11:13:22.000006": {
+    "username": "Andriy",
+    "message": "Cool! Can you also share what projects are covered in the course?"
+  },
+  "2025-06-28 11:14:45.000007": {
+    "username": "🛡️ Admin Mike (Sales Team)",
+    "message": "> Andriy\n>Can you also share what projects are covered in the course?\n\nSure! The Core course includes **4 practical projects**, like a to-do app, blog engine, API backend, and a small team task manager. We'll send you the full curriculum via email if you request it 👍"
+  },
+  "2025-06-28 12:20:30.000008": {
+    "username": "Sasha",
+    "message": "Hi, I’m curious about the Data Science course. When does it start?"
+  },
+  "2025-06-28 12:21:30.000009": {
+    "username": "🛡️ Admin Mike (Sales Team)",
+    "message": "> Sasha\n>curious about the Data Science course\n\nHi Sasha! 👋 We’re currently enrolling for two groups: **July 5** and **July 20**. Send us a message at **support@pythoncourses.example** and we’ll help you choose the best fit. The July 5 group starts soon, so signing up now might get you an early access discount!"
+  },
+  "2025-06-28 12:23:00.000010": {
+    "username": "frontend_guy",
+    "message": "Do you have any fullstack courses planned for this summer?"
+  },
+  "2025-06-28 12:24:40.000011": {
+    "username": "🛡️ Admin Mike (Sales Team)",
+    "message": "> frontend_guy\n>fullstack courses planned\n\nHey! Yes — our Fullstack Developer program is launching in **late July**. Just drop us a line at **support@pythoncourses.example** and we’ll notify you with the full syllabus and start dates."
+  }
+}

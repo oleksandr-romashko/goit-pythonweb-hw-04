@@ -1,0 +1,20 @@
+http.server — HTTP servers
+
+Source code: Lib/http/server.py
+
+This module defines classes for implementing HTTP servers.
+
+Warning
+
+http.server is not recommended for production. It only implements basic security checks.
+
+Availability: not WASI.
+
+This module does not work or is not available on WebAssembly. See WebAssembly platforms for more information.
+
+One class, HTTPServer, is a socketserver.TCPServer subclass. It creates and listens at the HTTP socket, dispatching the requests to a handler. Code to create and run the server looks like this:
+
+def run(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
+    server_address = ('', 8000)
+    httpd = server_class(server_address, handler_class)
+    httpd.serve_forever()

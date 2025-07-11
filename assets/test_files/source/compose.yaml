@@ -1,0 +1,25 @@
+name: goit-pythonweb-hw-03
+
+services:
+  web-server:
+    build: .
+    ports:
+      - "3000:3000"
+    restart: always
+    healthcheck:
+      test: [
+          "CMD-SHELL",
+          "wget -q --spider http://127.0.0.1:3000/ || exit 1",
+        ]
+      start_period: 5s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - storage_data:/app/storage/data
+    command: python main.py
+
+volumes:
+  storage_data:
