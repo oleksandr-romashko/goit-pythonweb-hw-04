@@ -1,0 +1,25 @@
+[project]
+name = "goit-pythonweb-hw-04"
+version = "0.1.0"  # Please check argument parser --version too
+description = "An asynchronous Python file sorter based on file extensions"
+authors = [
+    {name = "Oleksandr Romashko",email = "alex.rmshk@gmail.com"}
+]
+license = {text = "MIT"}
+requires-python = ">=3.13,<4"
+dependencies = [
+    "aiopath (>=0.7.7,<0.8.0)",
+    "aioshutil (>=1.5,<2.0)",
+    "colorama (>=0.4.6,<0.5.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+
+[tool.poetry.group.dev.dependencies]
+types-colorama = "^0.4.15.20240311"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
