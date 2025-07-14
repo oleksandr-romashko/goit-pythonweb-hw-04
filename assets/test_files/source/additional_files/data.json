@@ -1,0 +1,4 @@
+{
+  "conflicting_json": "with the same name and different content",
+  "should_be_handled_differently": "to preserve it's content, not just skipped from copying or overwritten"
+}
