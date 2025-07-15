@@ -1,24 +1,34 @@
 """
-Command handlers for the File Sorter CLI tool.
+Command handlers for the CLI.
 
-Define and manage CLI subcommands and their logic.
+Defines and manages CLI subcommands and their logic.
 """
 
-from .args_parser import CustomArgumentParser
+from utils.project_meta import get_project_metadata
+
+from .parser import CustomArgumentParser
+
+metadata = get_project_metadata()
 
 
 def parse_args():
-    """Parse application arguments"""
+    """Parse application arguments."""
+
     parser = CustomArgumentParser(
         app_title="📁 File Sorter",
         subtitle="Sort and organize your files by extension",
         description=(
-            "This CLI tool scans a source directory and copies files into "
-            "subfolders in the target directory based on file extensions."
+            f"v{metadata['version']}"
+            "\n\nThis CLI tool scans a source directory and copies files into "
+            "subfolder in the target directory based on file extensions."
+            "\n\nNotes to some definitions:"
+            "\n  duplicate - file with the same file name and content (skipped from copying)"
+            "\n  conflict - file with the same file name "
+            "and different content (resolved by new name)"
         ),
         epilog=[
-            "Created by Oleksandr Romashko",
-            "https://github.com/oleksandr-romashko",
+            f"Created by {metadata['author']}",
+            f"{metadata['homepage']}",
         ],
     )
     parser.add_argument("source", help="Source folder to scan and sort files from")
@@ -27,7 +37,7 @@ def parse_args():
     parser.add_argument(
         "--version",
         action="version",
-        version="%(prog)s 0.1.0",  # Please check pyproject.toml app version too
+        version=f"v{metadata['version']}",
         help="Show the version number and exit",
     )
 
