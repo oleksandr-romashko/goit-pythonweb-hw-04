@@ -55,6 +55,16 @@ async def main() -> None:
 # TODOs for enhancements and UX improvements:
 # 🔴 Critical: None
 # 🟡 Medium Priority:
+#    - Lowering the required version to 3.8+, or even 3.7+ if practical, for wider adoption,
+#      like uploading to PyPI:
+#       - Replace `import tomllib` with `tomli` (Python <3.11)
+#       - Update project metadata in `pyproject.toml` with: requires-python = ">=3.8"
+#       - (Optional) Add `__future__` import for annotations: from __future__ import annotations
+#       - match-case (pattern matching) - Use if-elif-else (Python Python 3.10+)
+#       - Self in annotations - Use quoted class name or workaround (Python 3.11+)
+#       - Replace built-in types in annotations (dict, list) with typing.Dict, typing.List, etc.
+#         if compatibility with Python 3.8/3.9 is desired for strict linters or type checkers.
+#       - Test backward compatibility on Python 3.8 and 3.9.
 #    - Add structured logging tags like [COPYING], [DUPLICATE], etc. Easier log filtering
 #      and debugging
 #    - Separate logger for CLI console (replacement of printing) and error file (verbose).
