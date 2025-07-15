@@ -64,6 +64,7 @@ async def main() -> None:
 #       - Self in annotations - Use quoted class name or workaround (Python 3.11+)
 #       - Replace built-in types in annotations (dict, list) with typing.Dict, typing.List, etc.
 #         if compatibility with Python 3.8/3.9 is desired for strict linters or type checkers.
+#       - walrus operator (:=) minimum required Python version is 3.8
 #       - Test backward compatibility on Python 3.8 and 3.9.
 #    - Add structured logging tags like [COPYING], [DUPLICATE], etc. Easier log filtering
 #      and debugging
