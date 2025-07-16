@@ -5,6 +5,7 @@ Intended to be called at the start of the application to initialize logging beha
 """
 
 import logging
+from logging.handlers import RotatingFileHandler
 import sys
 from pathlib import Path
 
@@ -12,11 +13,15 @@ from colorama import Fore, Style
 
 
 LOG_FILE_PATH = Path("logs/app.log").resolve()
+LOG_FILE_MAX_BYTES = 1_000_000  # ~1MB
+LOG_FILE_BACKUP_COUNT = 3
 
 
 def configure_logging(debug: bool = False, level: int = logging.INFO) -> None:
     """
     Configure root logger to log to file and optionally to console if debug is enabled.
+
+    Rotating log file handler: rotates after 1MB, keeps 3 backups
     """
     # Decide final logging level
     level = logging.DEBUG if debug else level
@@ -31,7 +36,12 @@ def configure_logging(debug: bool = False, level: int = logging.INFO) -> None:
 
     # File handler
     LOG_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    file_handler = logging.FileHandler(LOG_FILE_PATH, encoding="utf-8")
+    file_handler = RotatingFileHandler(
+        LOG_FILE_PATH,
+        maxBytes=LOG_FILE_MAX_BYTES,
+        backupCount=LOG_FILE_BACKUP_COUNT,
+        encoding="utf-8",
+    )
     file_handler.setFormatter(formatter)
     root.addHandler(file_handler)
 

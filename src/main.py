@@ -108,7 +108,8 @@ async def main() -> None:
 #      existing file or fail on first or potential overwrite.
 #    - Adjustable concurrency with number of concurrent coroutines via --concurrency or auto.
 #      Small batches or small files vs larger datasets concurrency may help reduce total time.
-#    - Safe overwrite strategies. What to do on first encounter of overwrite. Revoke changes if canceled?
+#    - Safe overwrite strategies. What to do on first encounter of overwrite.
+#      Revoke changes if canceled?
 #    - Show "excluding duplicates" or "(duplicates excluded)" message during/after copy.
 #    - --show-logfile to print to console content of the application log (may have many lines)
 if __name__ == "__main__":
