@@ -3,6 +3,7 @@
         "aiopath",
         "aioshutil",
         "levelname",
-        "levelno"
+        "levelno",
+        "subfolders"
     ]
 }

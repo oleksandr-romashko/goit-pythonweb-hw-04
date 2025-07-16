@@ -18,11 +18,27 @@ class CustomArgumentParser(argparse.ArgumentParser):
     def __init__(
         self, *args, app_title: str | None = None, subtitle: str | None = None, **kwargs
     ):
+        """
+        Initialize the custom argument parser.
+
+        Args:
+            app_title (str, optional): Title of the CLI application.
+            subtitle (str, optional): Subtitle displayed below the title.
+        """
         self.app_title = app_title
         self.subtitle = subtitle
         super().__init__(*args, **kwargs)
 
     def error(self, message: str) -> NoReturn:
+        """
+        Override default error handler to provide colored and styled output.
+
+        Args:
+            message (str): The error message to display.
+
+        Raises:
+            SystemExit: Always exits with status code 2.
+        """
         self.exit(
             2,
             f"{Fore.RED}❌ Error: {message}{Style.RESET_ALL}\n\n"
@@ -31,6 +47,13 @@ class CustomArgumentParser(argparse.ArgumentParser):
         )
 
     def format_help(self) -> str:
+        """
+        Generate a customized help message with title, subtitle,
+        usage, options, and epilog.
+
+        Returns:
+            str: The full help message.
+        """
         help_parts: list[str] = []
 
         if self.app_title:
@@ -67,6 +90,12 @@ class CustomArgumentParser(argparse.ArgumentParser):
         return "\n".join(help_parts)
 
     def format_usage(self):
+        """
+        Generate a platform-specific usage and example command.
+
+        Returns:
+            str: Usage and example command string.
+        """
         is_windows = platform.system() == "Windows"
 
         usage_cmd = (
@@ -87,14 +116,36 @@ class CustomArgumentParser(argparse.ArgumentParser):
         )
 
     def format_positionals(self) -> str:
+        """
+        Format and return help section for positional arguments.
+
+        Returns:
+            str: Formatted positional argument help section.
+        """
         return self._format_actions(
             self._get_positional_actions(), title="Positional arguments"
         )
 
     def format_optionals(self) -> str:
+        """
+        Format and return help section for optional arguments.
+
+        Returns:
+            str: Formatted optional argument help section.
+        """
         return self._format_actions(self._get_optional_actions(), title="Options")
 
     def _format_actions(self, actions, title) -> str:
+        """
+        Format a given list of argparse actions with a section title.
+
+        Args:
+            actions (list): List of argparse actions.
+            title (str): Section title for these actions.
+
+        Returns:
+            str: Formatted help section.
+        """
         if not actions:
             return ""
         formatter = self._get_formatter()

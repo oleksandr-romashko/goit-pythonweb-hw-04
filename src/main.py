@@ -91,10 +91,6 @@ async def main() -> None:
 # TODO for enhancements and UX improvements:
 # 🔴 Critical: None
 # 🟡 Medium Priority:
-#    - Add feature: app arg --exclude to ignore certain file types (e.g. png, js, etc.)
-#      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
-#    - Package on PyPI for distribution. Purpose: Broader usage, distribution with
-#      global command registration in user system. Purpose: Quality-of-life for frequent users.
 #    - Lowering the required version to 3.8+, or even 3.7+ if practical, for wider adoption,
 #      like uploading to PyPI, as example:
 #       - Replace `import tomllib` with `tomli` (Python <3.11)
@@ -106,11 +102,17 @@ async def main() -> None:
 #         if compatibility with Python 3.8/3.9 is desired for strict linters or type checkers.
 #       - walrus operator (:=) minimum required Python version is 3.8
 #       - Test backward compatibility on Python 3.8 and 3.9.
+#    - Package on PyPI for distribution. Purpose: Broader usage, distribution with
+#      global command registration in user system. Purpose: Quality-of-life for frequent users.
 # 🟢 Nice to Have:
+#    - Add feature: app arg --exclude to ignore certain file types (e.g. png, js, etc.)
+#      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
 #    - Adjustable concurrency with number of concurrent coroutines via --concurrency
 #      or auto (intelligent adaptation based on number of files, their total size,
 #      average size / max size per file).
 #      Purpose: For better performance on bigger datasets.
+#               Small batches or small files vs larger datasets concurrency
+#               may help reduce total time.
 #    - Naming strategy for duplicates conflict. Add to the file name text based on parent folder,
 #      or move into subfolder.
 #      Currently --rename-with-index (default)
@@ -121,7 +123,6 @@ async def main() -> None:
 #      existing file or fail on first or potential overwrite for most safe execution.
 #      Safe overwrite strategies. What to do on first encounter of overwrite.
 #      Revoke changes if canceled?
-#      Small batches or small files vs larger datasets concurrency may help reduce total time.
 #    - Add feature --show-logfile to print to console content of the application log
 #      (user centric, no need to check logs/app.log file - inconvenient)
 #      (Caution: may have many lines, so maybe just print last X lines/pages?)
