@@ -19,13 +19,14 @@ colorama.init(autoreset=True)
 console_logger = get_console_logger()
 
 
-async def sort_files(source_dir: str, target_dir: str) -> None:
+async def sort_files(source_dir: str, target_dir: str, dry_run: bool = False) -> None:
     """
     Sort files from source directory into structured folders in the target location.
 
     Args:
         source_dir: Path to the directory with unsorted files.
         target_dir: Path where sorted files will be placed.
+        dry_run: Flag for dry-run simulation without actual files copying
     """
     logging.info(
         "[SORTING] Start sorting files with app args: source '%s' and target '%s'.",
@@ -58,23 +59,31 @@ async def sort_files(source_dir: str, target_dir: str) -> None:
     mapped_files_dict = await read_folder(source_dir_path)
 
     # Copy files to structured folders
-    await copy_files(mapped_files_dict, target_dir_path, target_dir)
+    await copy_files(mapped_files_dict, target_dir_path, target_dir, dry_run)
 
 
 async def main() -> None:
     """Main async entry point: parses CLI args and starts sorting."""
     # Parse CLI arguments
     args = parse_args()
-    debug = args.debug
-    source_dir = args.source
-    target_dir = args.target
+    source_dir: str = args.source
+    target_dir: str = args.target
+    debug: bool = args.debug
+    dry_run: bool = args.dry_run
+
+    if debug:
+        logging.info("[APP] Debug enabled. Enable debug logging to console.")
+    if dry_run:
+        logging.info(
+            "[APP] Dry run enabled. No files will be copied. Simulating sort operation only."
+        )
 
     configure_logging(debug=debug, level=logging.INFO)
 
     logging.debug("[APP] APPLICATION STARTED.")
 
     # Call the main app logic
-    await sort_files(source_dir, target_dir)
+    await sort_files(source_dir, target_dir, dry_run=dry_run)
 
     logging.debug("[APP] APPLICATION STOPPED.")
 
@@ -82,11 +91,12 @@ async def main() -> None:
 # TODO for enhancements and UX improvements:
 # 🔴 Critical: None
 # 🟡 Medium Priority:
-#    - Add feature --dry-run mode for safe preview, without actual file copying.
-#    - Add feature --exclude to ignore certain file types. Purpose: Control over what to sort
-#    - Package on PyPI for distribution. Purpose: Broader usage, distribution
+#    - Add feature: app arg --exclude to ignore certain file types (e.g. png, js, etc.)
+#      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
+#    - Package on PyPI for distribution. Purpose: Broader usage, distribution with
+#      global command registration in user system. Purpose: Quality-of-life for frequent users.
 #    - Lowering the required version to 3.8+, or even 3.7+ if practical, for wider adoption,
-#      like uploading to PyPI:
+#      like uploading to PyPI, as example:
 #       - Replace `import tomllib` with `tomli` (Python <3.11)
 #       - Update project metadata in `pyproject.toml` with: requires-python = ">=3.8"
 #       - (Optional) Add `__future__` import for annotations: from __future__ import annotations
@@ -97,21 +107,29 @@ async def main() -> None:
 #       - walrus operator (:=) minimum required Python version is 3.8
 #       - Test backward compatibility on Python 3.8 and 3.9.
 # 🟢 Nice to Have:
-#    - Global command registration in user system. Purpose: Quality-of-life for frequent users.
+#    - Adjustable concurrency with number of concurrent coroutines via --concurrency
+#      or auto (intelligent adaptation based on number of files, their total size,
+#      average size / max size per file).
+#      Purpose: For better performance on bigger datasets.
+#    - Naming strategy for duplicates conflict. Add to the file name text based on parent folder,
+#      or move into subfolder.
+#      Currently --rename-with-index (default)
+#      --rename-with-parent-folder
+#      --skip-conflicts
+#      --move-duplicates-to /duplicates
+#    - Configurable conflict resolution options. Decide what to do when trying to overwrite
+#      existing file or fail on first or potential overwrite for most safe execution.
+#      Safe overwrite strategies. What to do on first encounter of overwrite.
+#      Revoke changes if canceled?
+#      Small batches or small files vs larger datasets concurrency may help reduce total time.
+#    - Add feature --show-logfile to print to console content of the application log
+#      (user centric, no need to check logs/app.log file - inconvenient)
+#      (Caution: may have many lines, so maybe just print last X lines/pages?)
+#      Note: currently is solved by --debug arg, but works for current run.
+# ⬤ Skipped:
 #    - Simple progress bar while copying █▒▒▒▒▒▒▒▒▒10%. Helps UX and perception of progress.
 #    - tqdm-style (library tqdm.asyncio) progress bar (async-compatible).
 #      Slick UX, more detailed than x/y.
-#    - Naming strategy for duplicates conflict. Add to name text based on parent folder,
-#      or move into subfolder. --rename-with-index (default) --rename-with-parent-folder
-#      --skip-conflicts --move-duplicates-to /duplicates
-#    - Configurable conflict resolution options. Decide what to do when trying to overwrite
-#      existing file or fail on first or potential overwrite.
-#    - Adjustable concurrency with number of concurrent coroutines via --concurrency or auto.
-#      Small batches or small files vs larger datasets concurrency may help reduce total time.
-#    - Safe overwrite strategies. What to do on first encounter of overwrite.
-#      Revoke changes if canceled?
-#    - Show "excluding duplicates" or "(duplicates excluded)" message during/after copy.
-#    - --show-logfile to print to console content of the application log (may have many lines)
 if __name__ == "__main__":
     try:
         asyncio.run(main())

@@ -16,7 +16,7 @@ console_logger = get_console_logger()
 
 
 def get_spinner_dots(start_time: float, spinner: list[str] | None = None) -> str:
-    """Returns the current spinner frame based on elapsed time.
+    """Return the current spinner frame based on elapsed time.
 
     Args:
         start_time (float): The monotonic start time to calculate elapsed duration.
@@ -37,21 +37,21 @@ def get_spinner_dots(start_time: float, spinner: list[str] | None = None) -> str
 
 
 def print_line(
-    message: str = "", end: str = "\n", overwrite_prev: bool = False
+    message: str = "", end: str = "\n", overwrite_prev_line: bool = False
 ) -> None:
-    """Prints a line to the console, optionally overwriting the previous one.
+    """Print a line to the console, optionally overwriting the previous one.
 
     Args:
         message (str): The message to print.
         end (str): The end character (defaults to newline).
         overwrite_prev (bool): If True, overwrites the current line in the terminal.
     """
-    prefix = "\r" if overwrite_prev else ""
+    prefix = "\r" if overwrite_prev_line else ""
     print(f"{prefix}{message}", end=end, flush=True)
 
 
 def print_mapping_update(found_counter: int, start_time: float) -> None:
-    """Prints a dynamic update showing how many files were found so far.
+    """Print a dynamic update showing how many files were found so far.
 
     Args:
         found_counter (int): The number of files found.
@@ -60,7 +60,7 @@ def print_mapping_update(found_counter: int, start_time: float) -> None:
     spinner_frame = get_spinner_dots(start_time)
     print_line(
         f"🔎 Found {Style.BRIGHT}{found_counter} files{Style.RESET_ALL} so far{spinner_frame}",
-        overwrite_prev=True,
+        overwrite_prev_line=True,
         end="",
     )
 
@@ -70,9 +70,10 @@ def print_mapping_summary(
     time_to_execute: float,
     skipped_count: int = 0,
 ):
-    """Prints a summary of the file mapping and analysis process.
+    """Print a summary of the file mapping and analysis process.
 
-    Includes grouped counts per extension, duplicates, conflicts, and size stats.
+    Includes grouped counts per extension, along with statistics for duplicates,
+    conflicts, and total size.
 
     Args:
         files_map (dict): Mapping of file extensions to lists of file info dictionaries.
@@ -86,7 +87,7 @@ def print_mapping_summary(
 
     time_to_execute_str = f"{time_to_execute:.2f}s"
 
-    print_line("📁 Files grouped by extension:", overwrite_prev=True)
+    print_line("📁 Files grouped by extension:", overwrite_prev_line=True)
     for extension, entries in sorted(files_map.items()):
         ext_total = len(entries)
         ext_duplicates = 0
@@ -166,7 +167,7 @@ def print_mapping_summary(
 
 
 def print_copy_update(copied_counter: int, total_files: int, start_time: float):
-    """Prints a dynamic update showing the number of files copied so far.
+    """Print a dynamic update showing the number of files copied so far.
 
     Args:
         copied_counter (int): Number of files successfully copied.
@@ -179,19 +180,19 @@ def print_copy_update(copied_counter: int, total_files: int, start_time: float):
             f"📄 Copied {Style.BRIGHT}{copied_counter}{Style.RESET_ALL}/{Style.BRIGHT}{total_files} "
             f"files{Style.RESET_ALL}{spinner_frame}"
         ),
-        overwrite_prev=True,
+        overwrite_prev_line=True,
         end="",
     )
 
 
 def print_copy_summary(
-    files_number: int, origin_path: str, time_to_execute: float, error_count: int = 0
+    files_number: int, target_path: str, time_to_execute: float, error_count: int = 0
 ):
-    """Prints a final summary after the file copy operation is completed.
+    """Print a final summary after the file copy operation completes.
 
     Args:
         files_number (int): Total number of files copied.
-        origin_path (str): Destination directory path.
+        target_path (str): Destination directory path.
         time_to_execute (float): Duration of the copy operation.
         error_count (int, optional): Number of copy failures.
     """
@@ -200,16 +201,26 @@ def print_copy_summary(
     print_line(
         (
             f"✅ Copied {Style.BRIGHT}{files_number} files{Style.RESET_ALL} "
-            f"into '{Style.BRIGHT}{origin_path}{Style.RESET_ALL}' folder "
+            f"into '{Style.BRIGHT}{target_path}{Style.RESET_ALL}' folder "
             f"in {time_to_execute_str}"
             f"{errors_str}"
         ),
-        overwrite_prev=True,
+        overwrite_prev_line=True,
+    )
+
+
+def print_dry_run_msg(total_files: int, total_folders: int, target_path_str: str):
+    """Print a message indicating that the dry run was successful."""
+    print_line("✅ Dry run complete. Copying skipped. No files were copied.")
+    print_line(
+        f"☝️  Would copy {Style.BRIGHT}{total_files} files{Style.RESET_ALL} "
+        f"into {Style.BRIGHT}{total_folders} folders{Style.RESET_ALL} "
+        f"at '{Style.BRIGHT}{target_path_str}{Style.RESET_ALL}'."
     )
 
 
 def print_interrupt_msg():
-    """Prints a message indicating that execution was interrupted."""
+    """Print a message indicating that execution was interrupted."""
     print_line()
     console_logger.warning(
         "Execution interrupted. Sorting was cancelled before completion."

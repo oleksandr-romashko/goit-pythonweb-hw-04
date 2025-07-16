@@ -24,6 +24,7 @@ from cli.output import (
     print_mapping_update,
     print_mapping_summary,
     print_copy_update,
+    print_dry_run_msg,
     print_copy_summary,
 )
 from utils.hash_calculator import get_file_hash
@@ -193,7 +194,8 @@ def resolve_duplicates_and_conflicts(
 async def copy_files(
     files_map_dict: dict[str, list[dict]],
     target_dir_path: AsyncPath,
-    origin_path_str: str,
+    target_str: str,
+    dry_run: bool = False,
 ) -> None:
     """Copy mapped files into target directory."""
     logging.info(
@@ -250,13 +252,25 @@ async def copy_files(
         if file_info.get("output_name")  # skip pure duplicates when value is None
     ]
     total_files = len(all_files)
+
+    if dry_run:
+        total_folders = len(files_map_dict.values())
+        # Skip coping any files, just show dry run message
+        logging.debug(
+            "[DRY RUN] Would copy %d files to '%s'",
+            total_files,
+            target_dir_path,
+        )
+        print_dry_run_msg(total_files, total_folders, target_str)
+        return
+
     tasks = [copy_single_file(file_info) for file_info in all_files]
 
     logging.info("[COPY] Copying %s files into '%s'...", total_files, target_dir_path)
     await asyncio.gather(*tasks)
 
     elapsed_time = time.monotonic() - start_time
-    print_copy_summary(copied_counter, origin_path_str, elapsed_time, failed_counter)
+    print_copy_summary(copied_counter, target_str, elapsed_time, failed_counter)
     logging.info(
         "[COPY] %d files copied successfully into target '%s' in %s.",
         copied_counter,
