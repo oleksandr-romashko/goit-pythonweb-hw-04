@@ -37,6 +37,7 @@ async def read_folder(
 
     Returns a mapping of extensions to lists of AsyncPath file objects.
     """
+    logging.info("[READ] Start reading source folder content at: %s", source_path)
 
     # Start tracking execution time
     start_time = time.monotonic()
@@ -71,11 +72,14 @@ async def read_folder(
                     await walk_dir(entry)
             except OSError as exc:
                 skipped_counter += 1
-                logging.debug("❌ Error reading '%s': %s", entry, exc)
-                logging.warning("⚠️  Skipped unreadable: %s", entry)
+                logging.warning(
+                    "[READ] ❌ Error occurred while reading '%s': %s. Skipped unreadable entry.",
+                    entry,
+                    exc,
+                )
 
     # Perform source directory file mapping, incl. all subdirectories
-    logging.info("Analyzing and mapping files in folder: %s", source_path)
+    logging.info("[READ] Analyzing and mapping files in folder: %s", source_path)
     await walk_dir(source_path)
 
     # Resolve duplicate and conflicting file names
@@ -87,11 +91,13 @@ async def read_folder(
     # Show summary
     print_mapping_summary(files_map, elapsed_time, skipped_counter)
     logging.info(
-        "Found %s files in %s at source folder: %s",
+        "[READ] Found %s files in %s at source folder: %s",
         (sum(len(files) for files in files_map.values())),
         f"{elapsed_time:.2f}s",
         source_path,
     )
+
+    logging.debug("[READ] End of reading source folder content.")
 
     return files_map
 
@@ -119,6 +125,11 @@ def resolve_duplicates_and_conflicts(
         dict[str, list[dict]]: The same mapping with resolved 'output_name' fields in each
         file info dict.
     """
+    logging.debug("[RESOLVE] Start of resolving duplicates and conflicts.")
+    logging.debug(
+        "[RESOLVE] Resolving duplicates and conflicts of files mapping: %s", files_map
+    )
+
     output_name_tracker: defaultdict = defaultdict(dict)  # ext -> {name: hash}
     used_output_names: defaultdict = defaultdict(set)  # ext -> set of used output names
 
@@ -131,6 +142,9 @@ def resolve_duplicates_and_conflicts(
                 if output_name_tracker[ext][name] == hash_sum:
                     # Pure duplicate: same name and hash
                     file_info["output_name"] = None  # Mark to skip
+                    logging.debug(
+                        "[RESOLVE] File '%s' is marked as duplicate.", file_info["path"]
+                    )
                 else:
                     # Conflict: same name, different hash
                     # Get name without extension
@@ -150,12 +164,28 @@ def resolve_duplicates_and_conflicts(
                             else f"{base_name}({counter})"
                         )
                     file_info["output_name"] = new_name  # Save new unique name
+                    logging.debug(
+                        (
+                            "[RESOLVE] File '%s' has name conflict, that will be "
+                            "resolved by assigning a new name '%s' to the file."
+                        ),
+                        file_info["path"],
+                        new_name,
+                    )
                     used_output_names[ext].add(new_name)  # Mark name as used
+
             else:
                 # Unique so far
                 file_info["output_name"] = name
                 output_name_tracker[ext][name] = hash_sum
                 used_output_names[ext].add(name)
+                logging.debug(
+                    "[RESOLVE] File '%s' will remain it's original name '%s'.",
+                    file_info["path"],
+                    file_info["output_name"],
+                )
+
+    logging.info("[RESOLVE] Duplicates and conflicts resolved successfully.")
 
     return files_map
 
@@ -166,6 +196,10 @@ async def copy_files(
     origin_path_str: str,
 ) -> None:
     """Copy mapped files into target directory."""
+    logging.info(
+        "[COPY] Start of copying files into target folder: %s", target_dir_path
+    )
+    logging.debug("[COPY] Copying files of files mapping: %s", files_map_dict)
 
     # Start tracking execution time
     start_time = time.monotonic()
@@ -186,15 +220,27 @@ async def copy_files(
                 await copy_file(file_info["path"], output_path)
                 copied_counter += 1
                 print_copy_update(copied_counter, total_files, start_time)
+                logging.debug(
+                    "[COPY] File '%s' copied from '%s' to '%s' ('%s' folder) as '%s'.",
+                    file_info["name"],
+                    file_info["path"],
+                    output_path,
+                    safe_ext,
+                    file_info["output_name"],
+                )
             except OSError as exc:
                 failed_counter += 1
                 logging.debug(
-                    "❌ Failed to copy from '%s' to '%s': %s",
+                    "[COPY] ❌ Failed to copy from '%s' to '%s': %s",
                     file_info["path"],
                     output_path,
                     exc,
                 )
-                logging.warning("⚠️ Skipped: %s", file_info["path"])
+                logging.warning(
+                    "[COPY] ⚠️  Copying of file '%s' skipped due to error: %s",
+                    file_info["name"],
+                    file_info["path"],
+                )
 
     # Flatten and filter files that are not pure duplicates
     all_files = [
@@ -206,13 +252,13 @@ async def copy_files(
     total_files = len(all_files)
     tasks = [copy_single_file(file_info) for file_info in all_files]
 
-    logging.info("Copying %s files into '%s'...", total_files, target_dir_path)
+    logging.info("[COPY] Copying %s files into '%s'...", total_files, target_dir_path)
     await asyncio.gather(*tasks)
 
     elapsed_time = time.monotonic() - start_time
     print_copy_summary(copied_counter, origin_path_str, elapsed_time, failed_counter)
     logging.info(
-        "%s files copied successfully into target '%s' in %s.",
+        "[COPY] %d files copied successfully into target '%s' in %s.",
         copied_counter,
         target_dir_path,
         f"{elapsed_time:.2f}s",

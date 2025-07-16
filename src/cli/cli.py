@@ -33,12 +33,14 @@ def parse_args():
     )
     parser.add_argument("source", help="Source folder to scan and sort files from")
     parser.add_argument("target", help="Target folder to sort files into")
-
     parser.add_argument(
         "--version",
         action="version",
         version=f"v{metadata['version']}",
         help="Show the version number and exit",
+    )
+    parser.add_argument(
+        "--debug", action="store_true", help="Enable debug logging to console"
     )
 
     # TODO: Add optional args in the future --dry-run

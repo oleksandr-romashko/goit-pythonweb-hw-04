@@ -5,10 +5,69 @@ Intended to be called at the start of the application to initialize logging beha
 """
 
 import logging
+import sys
+from pathlib import Path
+
+from colorama import Fore, Style
 
 
-def configure_logging():
-    """Configure basic logging."""
-    logging.basicConfig(
-        level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(message)s"
-    )
+LOG_FILE_PATH = Path("logs/app.log").resolve()
+
+
+def configure_logging(debug: bool = False, level: int = logging.INFO) -> None:
+    """
+    Configure root logger to log to file and optionally to console if debug is enabled.
+    """
+    # Decide final logging level
+    level = logging.DEBUG if debug else level
+
+    # Reset any existing handlers
+    root = logging.getLogger()
+    root.setLevel(level)
+    root.handlers.clear()
+
+    # Common log format
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+
+    # File handler
+    LOG_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    file_handler = logging.FileHandler(LOG_FILE_PATH, encoding="utf-8")
+    file_handler.setFormatter(formatter)
+    root.addHandler(file_handler)
+
+    # Console handler if debug is True
+    if debug:
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setFormatter(formatter)
+        root.addHandler(console_handler)
+
+    # Silence noisy libraries
+    logging.getLogger("asyncio").setLevel(logging.WARNING)
+
+
+def get_console_logger() -> logging.Logger:
+    """Colored console logger"""
+
+    class ConsoleFormatter(logging.Formatter):
+        """Custom formatter for console output with colored and prefixed log messages."""
+
+        def format(self, record):
+            """Format the log record with appropriate color and symbol based on log level."""
+            if record.levelno == logging.WARNING:
+                msg = f"{Fore.YELLOW}⚠️  Warning: {record.getMessage()}{Style.RESET_ALL}"
+            elif record.levelno == logging.ERROR or record.levelno == logging.CRITICAL:
+                msg = f"{Fore.RED}❌ Error: {record.getMessage()}{Style.RESET_ALL}"
+            else:
+                msg = record.getMessage()
+            return msg
+
+    logger = logging.getLogger("console")
+    logger.setLevel(logging.INFO)  # Always enabled
+    logger.propagate = False
+
+    if not logger.handlers:
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(ConsoleFormatter())
+        logger.addHandler(handler)
+
+    return logger

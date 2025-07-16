@@ -9,6 +9,11 @@ import time
 
 from colorama import Style
 
+from utils.logger_config import get_console_logger
+
+
+console_logger = get_console_logger()
+
 
 def get_spinner_dots(start_time: float, spinner: list[str] | None = None) -> str:
     """Returns the current spinner frame based on elapsed time.
@@ -31,16 +36,18 @@ def get_spinner_dots(start_time: float, spinner: list[str] | None = None) -> str
     return f"{current_frame:<{max(len(frame) for frame in spinner)}}"
 
 
-def print_line(text: str, end: str = "\n", overwrite_prev: bool = False) -> None:
+def print_line(
+    message: str = "", end: str = "\n", overwrite_prev: bool = False
+) -> None:
     """Prints a line to the console, optionally overwriting the previous one.
 
     Args:
-        text (str): The text to print.
+        message (str): The message to print.
         end (str): The end character (defaults to newline).
         overwrite_prev (bool): If True, overwrites the current line in the terminal.
     """
     prefix = "\r" if overwrite_prev else ""
-    print(f"{prefix}{text}", end=end, flush=True)
+    print(f"{prefix}{message}", end=end, flush=True)
 
 
 def print_mapping_update(found_counter: int, start_time: float) -> None:
@@ -126,9 +133,10 @@ def print_mapping_summary(
 
     # Skipped files
     if skipped_count:
-        print_line(
-            f"⚠️  Skipped {skipped_count} file{'s' if skipped_count != 1 else ''} "
-            "(unreadable or permission denied)",
+        console_logger.warning(
+            "Skipped %d file%s due to unreadable format or permission issues",
+            skipped_count,
+            "s" if skipped_count != 1 else "",
         )
 
     # Final summary
@@ -202,4 +210,7 @@ def print_copy_summary(
 
 def print_interrupt_msg():
     """Prints a message indicating that execution was interrupted."""
-    print_line("\n⚠️  Execution interrupted. Sorting was cancelled before completion.")
+    print_line()
+    console_logger.warning(
+        "Execution interrupted. Sorting was cancelled before completion."
+    )
