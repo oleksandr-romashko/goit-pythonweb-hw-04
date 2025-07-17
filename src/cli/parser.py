@@ -5,9 +5,11 @@ Provides colored usage, subtitles, and optional epilog support
 for a better CLI user experience.
 """
 
+from __future__ import annotations
+
 import argparse
 import platform
-from typing import NoReturn
+from typing import List, Optional, NoReturn
 
 from colorama import Style, Fore
 
@@ -16,7 +18,11 @@ class CustomArgumentParser(argparse.ArgumentParser):
     """ArgumentParser subclass providing enhanced, colored help output."""
 
     def __init__(
-        self, *args, app_title: str | None = None, subtitle: str | None = None, **kwargs
+        self,
+        *args,
+        app_title: Optional[str] = None,
+        subtitle: Optional[str] = None,
+        **kwargs,
     ):
         """
         Initialize the custom argument parser.
@@ -54,7 +60,7 @@ class CustomArgumentParser(argparse.ArgumentParser):
         Returns:
             str: The full help message.
         """
-        help_parts: list[str] = []
+        help_parts: List[str] = []
 
         if self.app_title:
             help_parts.append(
@@ -79,12 +85,7 @@ class CustomArgumentParser(argparse.ArgumentParser):
         )
 
         if self.epilog:
-            lines: list[str] | str = (
-                self.epilog
-                if isinstance(self.epilog, list)
-                else self.epilog.splitlines()
-            )
-            help_parts.extend(f"{Style.DIM}{line}{Style.RESET_ALL}" for line in lines)
+            help_parts.append(f"{Style.DIM}{self.epilog}{Style.RESET_ALL}")
             help_parts.append("")  # Ensure newline at the end
 
         return "\n".join(help_parts)

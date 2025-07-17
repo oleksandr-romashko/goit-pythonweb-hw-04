@@ -17,19 +17,20 @@ caio = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "aiopath"
-version = "0.7.7"
+version = "0.5.12"
 description = "📁 Async pathlib for Python"
 optional = false
-python-versions = ">=3.12"
+python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "aiopath-0.7.7-py2.py3-none-any.whl", hash = "sha256:cd5d18de8ede167e1db659f02ee448fe085f923cb8e194407ccc568bffc4fe4e"},
-    {file = "aiopath-0.7.7.tar.gz", hash = "sha256:ad4b9d09ae08ddf6d39dd06e7b0a353939e89528da571c0cd4f3fe071aefad4f"},
+    {file = "aiopath-0.5.12-py2.py3-none-any.whl", hash = "sha256:9d85fd17ef1cbc75c0e81619acb3a1632cf5e15ead459e57fef5ec85e0b7a1da"},
+    {file = "aiopath-0.5.12.tar.gz", hash = "sha256:de2f9401dd098b9a279afb265df5a6eb5b78f39c2c4f3871f671fc1dd4b21d64"},
 ]
 
 [package.dependencies]
-aiofile = ">=3.8.8,<4"
-anyio = ">=4.0.0,<5"
+aiofile = ">=3.5.0,<4"
+anyio = ">=3.2.0,<4"
+typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [[package]]
 name = "aioshutil"
@@ -43,55 +44,62 @@ files = [
     {file = "aioshutil-1.5.tar.gz", hash = "sha256:2756d6cd3bb03405dc7348ac11a0b60eb949ebd63cdd15f56e922410231c1201"},
 ]
 
+[package.dependencies]
+typing-extensions = {version = "*", markers = "python_version < \"3.10\""}
+
 [[package]]
 name = "anyio"
-version = "4.9.0"
+version = "3.7.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "anyio-4.9.0-py3-none-any.whl", hash = "sha256:9f76d541cad6e36af7beb62e978876f3b41e3e04f2c1fbf0884604c0a9c4d93c"},
-    {file = "anyio-4.9.0.tar.gz", hash = "sha256:673c0c244e15788651a4ff38710fea9675823028a6f08a5eda409e0c9840a028"},
+    {file = "anyio-3.7.1-py3-none-any.whl", hash = "sha256:91dee416e570e92c64041bd18b900d1d6fa78dff7048769ce5ac5ddad004fbb5"},
+    {file = "anyio-3.7.1.tar.gz", hash = "sha256:44a3c9aba0f5defa43261a8b3efb97891f2bd7d804e0e1f56419befa1adfc780"},
 ]
 
 [package.dependencies]
+exceptiongroup = {version = "*", markers = "python_version < \"3.11\""}
 idna = ">=2.8"
 sniffio = ">=1.1"
 
 [package.extras]
-doc = ["Sphinx (>=8.2,<9.0)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx_rtd_theme"]
-test = ["anyio[trio]", "blockbuster (>=1.5.23)", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypothesis (>=4.0)", "psutil (>=5.9)", "pytest (>=7.0)", "trustme", "truststore (>=0.9.1) ; python_version >= \"3.10\"", "uvloop (>=0.21) ; platform_python_implementation == \"CPython\" and platform_system != \"Windows\" and python_version < \"3.14\""]
-trio = ["trio (>=0.26.1)"]
+doc = ["Sphinx", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme (>=1.2.2)", "sphinxcontrib-jquery"]
+test = ["anyio[trio]", "coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "mock (>=4) ; python_version < \"3.8\"", "psutil (>=5.9)", "pytest (>=7.0)", "pytest-mock (>=3.6.1)", "trustme", "uvloop (>=0.17) ; python_version < \"3.12\" and platform_python_implementation == \"CPython\" and platform_system != \"Windows\""]
+trio = ["trio (<0.22)"]
 
 [[package]]
 name = "caio"
-version = "0.9.24"
+version = "0.9.22"
 description = "Asynchronous file IO for Linux MacOS or Windows."
 optional = false
-python-versions = ">=3.9"
+python-versions = "<4,>=3.7"
 groups = ["main"]
 files = [
-    {file = "caio-0.9.24-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:d80322126a97ba572412b17b2f086ff95195de2c4261deb19db6bfcdc9ef7540"},
-    {file = "caio-0.9.24-cp310-cp310-manylinux_2_34_aarch64.whl", hash = "sha256:37bc172349686139e8dc97fff7662c67b1837e18a67b99e8ef25585f2893d013"},
-    {file = "caio-0.9.24-cp310-cp310-manylinux_2_34_x86_64.whl", hash = "sha256:ad7f0902bf952237e120606252c14ab3cb05995c9f79f39154b5248744864832"},
-    {file = "caio-0.9.24-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:925b9e3748ce1a79386dfb921c0aee450e43225534551abd1398b1c08f9ba29f"},
-    {file = "caio-0.9.24-cp311-cp311-manylinux_2_34_aarch64.whl", hash = "sha256:3b4dc0a8fb9a58ab40f967ad5a8a858cc0bfb2348a580b4142595849457f9c9a"},
-    {file = "caio-0.9.24-cp311-cp311-manylinux_2_34_x86_64.whl", hash = "sha256:fa74d111b3b165bfad2e333367976bdf118bcf505a1cb44d3bcddea2849e3297"},
-    {file = "caio-0.9.24-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:7ae3566228383175265a7583107f21a7cb044a752ea29ba84fce7c1a49a05903"},
-    {file = "caio-0.9.24-cp312-cp312-manylinux_2_34_aarch64.whl", hash = "sha256:a306b0dda91cb4ca3170f066c114597f8ea41b3da578574a9d2b54f86963de68"},
-    {file = "caio-0.9.24-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:8ee158e56128d865fb7d57a9c9c22fca4e8aa8d8664859c977a36fff3ccb3609"},
-    {file = "caio-0.9.24-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:1d47ef8d76aca74c17cb07339a441c5530fc4b8dd9222dfb1e1abd7f9f9b814f"},
-    {file = "caio-0.9.24-cp313-cp313-manylinux_2_34_aarch64.whl", hash = "sha256:d15fc746c4bf0077d75df05939d1e97c07ccaa8e580681a77021d6929f65d9f4"},
-    {file = "caio-0.9.24-cp313-cp313-manylinux_2_34_x86_64.whl", hash = "sha256:9368eae0a9badd5f31264896c51b47431d96c0d46f1979018fb1d20c49f56156"},
-    {file = "caio-0.9.24-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:3f0e5a645ef4e7bb7a81e10ae2a7aef14988cb2cb4354588c6bf6f6f3f6de72a"},
-    {file = "caio-0.9.24-cp39-cp39-manylinux_2_34_aarch64.whl", hash = "sha256:08304fa80af7771c78a5bcc923449c7ec8134d589b50d48c66320f85552c7ae2"},
-    {file = "caio-0.9.24-cp39-cp39-manylinux_2_34_x86_64.whl", hash = "sha256:5339ced0764e10242a50ccb21db7f0d9c359881db0f72fa2c5e45ed828ffacf7"},
-    {file = "caio-0.9.24.tar.gz", hash = "sha256:5bcdecaea02a9aa8e3acf0364eff8ad9903d57d70cdb274a42270126290a77f1"},
+    {file = "caio-0.9.22-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:979bef84869822a0b1d10c99f7240e2ca8b00c138a54bec1fcbef1163a6bc976"},
+    {file = "caio-0.9.22-cp310-cp310-manylinux_2_34_aarch64.whl", hash = "sha256:bef2533b1444ce80df47ecce25ad8def6eb76a5ba8c1457074a16f5ab6e12670"},
+    {file = "caio-0.9.22-cp310-cp310-manylinux_2_34_x86_64.whl", hash = "sha256:76fe5d98ff55099ec61a1863eed53ef353ea815e529c19a284865af73b3c84a3"},
+    {file = "caio-0.9.22-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:dd99c28a85809d0954211d637dd0e2e5c0e385dcdfbdbc4ed914b549d7e0fb69"},
+    {file = "caio-0.9.22-cp311-cp311-manylinux_2_34_aarch64.whl", hash = "sha256:6ee67c4d63b77b3d07715c41939b71fee1bbb986219e398f3420ac31b43e65a8"},
+    {file = "caio-0.9.22-cp311-cp311-manylinux_2_34_x86_64.whl", hash = "sha256:fb335891181107bdb8f96dc133fc8e2612b62cd270219333659d6d53f75b1770"},
+    {file = "caio-0.9.22-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:25aae4c3b846eeca63c7d75d63b3fd8deaba9650ef1168d8a239e6a927299ded"},
+    {file = "caio-0.9.22-cp312-cp312-manylinux_2_34_aarch64.whl", hash = "sha256:ac332b8e2c8e0840fe10ee6971b38f8dac6ad64ecf6087ee3f70cd376f511699"},
+    {file = "caio-0.9.22-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:6f991e4812fd2d6e87f91ff78fcc7d4f299bd98765334756580d4ea42cad89f1"},
+    {file = "caio-0.9.22-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:c3d29f0f2f3a577b58794960dbfc78ef124a8b3e238d653a4c11c57f20651e34"},
+    {file = "caio-0.9.22-cp313-cp313-manylinux_2_34_aarch64.whl", hash = "sha256:a3307e064f423675c4ffd2608ecc86bc47652ec1547dab5f94b72d9599c23201"},
+    {file = "caio-0.9.22-cp313-cp313-manylinux_2_34_x86_64.whl", hash = "sha256:160a1dad60bbb4268811f88f817205fab6cba8fb50801fdd3d865b69999ea924"},
+    {file = "caio-0.9.22-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:ceb32307d6d3cfa512220b53b578833ebd27f8ed0b534f15e3e88e6d598bffe7"},
+    {file = "caio-0.9.22-cp38-cp38-manylinux_2_34_aarch64.whl", hash = "sha256:7145f2c47233af12cc0194a7bfe584c632b16fa00d3f900806eda527f89ce93b"},
+    {file = "caio-0.9.22-cp38-cp38-manylinux_2_34_x86_64.whl", hash = "sha256:3bedd3e8ccc485cb20d4d56b0af1471e8f8b5ca3f0b5f1f21ebd087bfdcd21a7"},
+    {file = "caio-0.9.22-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:ae19a37b7294dc15c8775ec657464a4370d1f8351d0fc3a284a9f014514b9be5"},
+    {file = "caio-0.9.22-cp39-cp39-manylinux_2_34_aarch64.whl", hash = "sha256:70e6a12c9d1db8fb7a07c5193ca352df1488787f1cf1c3814879dec754135031"},
+    {file = "caio-0.9.22-cp39-cp39-manylinux_2_34_x86_64.whl", hash = "sha256:3f2f7f22c60844165359a285c5d38ca0d4ab10ca6f6def79abf6243d019df64b"},
+    {file = "caio-0.9.22.tar.gz", hash = "sha256:7ea533d90e5fa0bba33bc8f4805b4c90f19e8d8ac5139a8033b92a6ab5c4012b"},
 ]
 
 [package.extras]
-develop = ["aiomisc-pytest", "coveralls", "pylama[toml]", "pytest", "pytest-cov", "setuptools"]
+develop = ["aiomisc-pytest", "pytest", "pytest-cov"]
 
 [[package]]
 name = "colorama"
@@ -104,6 +112,25 @@ files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
 ]
+
+[[package]]
+name = "exceptiongroup"
+version = "1.3.0"
+description = "Backport of PEP 654 (exception groups)"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+markers = "python_version < \"3.11\""
+files = [
+    {file = "exceptiongroup-1.3.0-py3-none-any.whl", hash = "sha256:4d111e6e0c13d0644cad6ddaa7ed0261a0b36971f6d23e7ec9b4b9097da78a10"},
+    {file = "exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88"},
+]
+
+[package.dependencies]
+typing-extensions = {version = ">=4.6.0", markers = "python_version < \"3.13\""}
+
+[package.extras]
+test = ["pytest (>=6)"]
 
 [[package]]
 name = "idna"
@@ -133,6 +160,49 @@ files = [
 ]
 
 [[package]]
+name = "tomli"
+version = "2.2.1"
+description = "A lil' TOML parser"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+markers = "python_version < \"3.11\""
+files = [
+    {file = "tomli-2.2.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:678e4fa69e4575eb77d103de3df8a895e1591b48e740211bd1067378c69e8249"},
+    {file = "tomli-2.2.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:023aa114dd824ade0100497eb2318602af309e5a55595f76b626d6d9f3b7b0a6"},
+    {file = "tomli-2.2.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ece47d672db52ac607a3d9599a9d48dcb2f2f735c6c2d1f34130085bb12b112a"},
+    {file = "tomli-2.2.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6972ca9c9cc9f0acaa56a8ca1ff51e7af152a9f87fb64623e31d5c83700080ee"},
+    {file = "tomli-2.2.1-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c954d2250168d28797dd4e3ac5cf812a406cd5a92674ee4c8f123c889786aa8e"},
+    {file = "tomli-2.2.1-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:8dd28b3e155b80f4d54beb40a441d366adcfe740969820caf156c019fb5c7ec4"},
+    {file = "tomli-2.2.1-cp311-cp311-musllinux_1_2_i686.whl", hash = "sha256:e59e304978767a54663af13c07b3d1af22ddee3bb2fb0618ca1593e4f593a106"},
+    {file = "tomli-2.2.1-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:33580bccab0338d00994d7f16f4c4ec25b776af3ffaac1ed74e0b3fc95e885a8"},
+    {file = "tomli-2.2.1-cp311-cp311-win32.whl", hash = "sha256:465af0e0875402f1d226519c9904f37254b3045fc5084697cefb9bdde1ff99ff"},
+    {file = "tomli-2.2.1-cp311-cp311-win_amd64.whl", hash = "sha256:2d0f2fdd22b02c6d81637a3c95f8cd77f995846af7414c5c4b8d0545afa1bc4b"},
+    {file = "tomli-2.2.1-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:4a8f6e44de52d5e6c657c9fe83b562f5f4256d8ebbfe4ff922c495620a7f6cea"},
+    {file = "tomli-2.2.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:8d57ca8095a641b8237d5b079147646153d22552f1c637fd3ba7f4b0b29167a8"},
+    {file = "tomli-2.2.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4e340144ad7ae1533cb897d406382b4b6fede8890a03738ff1683af800d54192"},
+    {file = "tomli-2.2.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:db2b95f9de79181805df90bedc5a5ab4c165e6ec3fe99f970d0e302f384ad222"},
+    {file = "tomli-2.2.1-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:40741994320b232529c802f8bc86da4e1aa9f413db394617b9a256ae0f9a7f77"},
+    {file = "tomli-2.2.1-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:400e720fe168c0f8521520190686ef8ef033fb19fc493da09779e592861b78c6"},
+    {file = "tomli-2.2.1-cp312-cp312-musllinux_1_2_i686.whl", hash = "sha256:02abe224de6ae62c19f090f68da4e27b10af2b93213d36cf44e6e1c5abd19fdd"},
+    {file = "tomli-2.2.1-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:b82ebccc8c8a36f2094e969560a1b836758481f3dc360ce9a3277c65f374285e"},
+    {file = "tomli-2.2.1-cp312-cp312-win32.whl", hash = "sha256:889f80ef92701b9dbb224e49ec87c645ce5df3fa2cc548664eb8a25e03127a98"},
+    {file = "tomli-2.2.1-cp312-cp312-win_amd64.whl", hash = "sha256:7fc04e92e1d624a4a63c76474610238576942d6b8950a2d7f908a340494e67e4"},
+    {file = "tomli-2.2.1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:f4039b9cbc3048b2416cc57ab3bda989a6fcf9b36cf8937f01a6e731b64f80d7"},
+    {file = "tomli-2.2.1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:286f0ca2ffeeb5b9bd4fcc8d6c330534323ec51b2f52da063b11c502da16f30c"},
+    {file = "tomli-2.2.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a92ef1a44547e894e2a17d24e7557a5e85a9e1d0048b0b5e7541f76c5032cb13"},
+    {file = "tomli-2.2.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9316dc65bed1684c9a98ee68759ceaed29d229e985297003e494aa825ebb0281"},
+    {file = "tomli-2.2.1-cp313-cp313-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:e85e99945e688e32d5a35c1ff38ed0b3f41f43fad8df0bdf79f72b2ba7bc5272"},
+    {file = "tomli-2.2.1-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:ac065718db92ca818f8d6141b5f66369833d4a80a9d74435a268c52bdfa73140"},
+    {file = "tomli-2.2.1-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:d920f33822747519673ee656a4b6ac33e382eca9d331c87770faa3eef562aeb2"},
+    {file = "tomli-2.2.1-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:a198f10c4d1b1375d7687bc25294306e551bf1abfa4eace6650070a5c1ae2744"},
+    {file = "tomli-2.2.1-cp313-cp313-win32.whl", hash = "sha256:d3f5614314d758649ab2ab3a62d4f2004c825922f9e370b29416484086b264ec"},
+    {file = "tomli-2.2.1-cp313-cp313-win_amd64.whl", hash = "sha256:a38aa0308e754b0e3c67e344754dff64999ff9b513e691d0e786265c93583c69"},
+    {file = "tomli-2.2.1-py3-none-any.whl", hash = "sha256:cb55c73c5f4408779d0cf3eef9f762b9c9f147a77de7b258bef0a5628adc85cc"},
+    {file = "tomli-2.2.1.tar.gz", hash = "sha256:cd45e1dc79c835ce60f7404ec8119f2eb06d38b1deba146f07ced3bbc44505ff"},
+]
+
+[[package]]
 name = "types-colorama"
 version = "0.4.15.20240311"
 description = "Typing stubs for colorama"
@@ -144,7 +214,20 @@ files = [
     {file = "types_colorama-0.4.15.20240311-py3-none-any.whl", hash = "sha256:6391de60ddc0db3f147e31ecb230006a6823e81e380862ffca1e4695c13a0b8e"},
 ]
 
+[[package]]
+name = "typing-extensions"
+version = "4.13.2"
+description = "Backported and Experimental Type Hints for Python 3.8+"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+markers = "python_version < \"3.11\""
+files = [
+    {file = "typing_extensions-4.13.2-py3-none-any.whl", hash = "sha256:a439e7c04b49fec3e5d3e2beaa21755cadbbdc391694e28ccdd36ca4a1408f8c"},
+    {file = "typing_extensions-4.13.2.tar.gz", hash = "sha256:e6c81219bd689f51865d9e372991c540bda33a0379d5573cddb9a3a23f7caaef"},
+]
+
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.13,<4"
-content-hash = "f10b4aee4103846e3c2167204874f00f1c6503730fe9ddfd8d3897404f4d0f3a"
+python-versions = ">=3.8,<3.12"
+content-hash = "05bdb9815b93e32ad901f83c9efc43804fc221122d959a8613a2dbdb3b5ae786"

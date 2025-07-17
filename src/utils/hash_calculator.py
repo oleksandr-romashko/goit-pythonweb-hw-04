@@ -1,8 +1,11 @@
 """Utility for calculating hash of files."""
 
+from __future__ import annotations
+
+from typing import cast
 import hashlib
 
-from aiopath import AsyncPath  # type: ignore
+from aiopath import AsyncPath
 
 
 async def get_file_hash(file_path: AsyncPath, chunk_size: int = 65536) -> str:
@@ -18,6 +21,6 @@ async def get_file_hash(file_path: AsyncPath, chunk_size: int = 65536) -> str:
     """
     hash_sha256 = hashlib.sha256()
     async with file_path.open("rb") as f:
-        while chunk := await f.read(chunk_size):
+        while chunk:= cast(bytes, await f.read(chunk_size)):
             hash_sha256.update(chunk)
     return hash_sha256.hexdigest()

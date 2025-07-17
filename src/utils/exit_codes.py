@@ -3,8 +3,9 @@
 Defines standard exit codes to indicate different termination reasons.
 """
 
-from enum import IntEnum
+from __future__ import annotations
 
+from enum import IntEnum
 
 class ExitCode(IntEnum):
     """Standard exit codes used across the CLI application."""

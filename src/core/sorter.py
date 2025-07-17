@@ -9,17 +9,21 @@ This module provides functionality to:
 - Provide real-time CLI and logging feedback.
 """
 
+from __future__ import annotations
+
 import asyncio
 from collections import defaultdict
 import logging
 import time
+from typing import List, Dict
 
-from aiopath import AsyncPath  # type: ignore
+from aiopath import AsyncPath
 
 from core.files import (
     get_file_extension,
     copy_file,
 )
+from core.file_entry import FileEntry
 from cli.output import (
     print_mapping_update,
     print_mapping_summary,
@@ -32,18 +36,18 @@ from utils.hash_calculator import get_file_hash
 
 async def read_folder(
     source_path: AsyncPath,
-) -> dict[str, list[dict]]:
+) -> Dict[str, List[FileEntry]]:
     """
     Recursively walk through the source directory and group all files by their extension.
 
-    Returns a mapping of extensions to lists of AsyncPath file objects.
+    Returns a mapping of extensions to lists of FileEntry file objects.
     """
     logging.info("[READ] Start reading source folder content at: %s", source_path)
 
     # Start tracking execution time
     start_time = time.monotonic()
 
-    files_map: dict[str, list[dict]] = defaultdict(list)
+    files_map: Dict[str, List[FileEntry]] = defaultdict(list)
     found_counter = 0
     skipped_counter = 0
 
@@ -59,14 +63,15 @@ async def read_folder(
                     size = stat.st_size
                     hash_sum = await get_file_hash(entry)
                     modified = stat.st_mtime  # UNIX timestamp
-                    file_info = {
+                    file_entry: FileEntry = {
                         "path": entry,
                         "name": entry.name,
                         "size": size,
                         "hash": hash_sum,
                         "modified": modified,
+                        "output_name": None
                     }
-                    files_map[ext].append(file_info)
+                    files_map[ext].append(file_entry)
                     found_counter += 1
                     print_mapping_update(found_counter, start_time)
                 elif await entry.is_dir():
@@ -104,8 +109,8 @@ async def read_folder(
 
 
 def resolve_duplicates_and_conflicts(
-    files_map: dict[str, list[dict]],
-) -> dict[str, list[dict]]:
+    files_map: Dict[str, List[FileEntry]],
+) -> Dict[str, List[FileEntry]]:
     """
     Resolve duplicate and conflicting file names by assigning unique output names.
 
@@ -119,11 +124,11 @@ def resolve_duplicates_and_conflicts(
     filename. For conflicting files, a numeric suffix is appended to create a unique name.
 
     Args:
-        files_map (dict[str, list[dict]]): A mapping from file extensions to lists of file
+        files_map (Dict[str, List[Entry]]): A mapping from file extensions to lists of file
         info dicts.
 
     Returns:
-        dict[str, list[dict]]: The same mapping with resolved 'output_name' fields in each
+        Dict[str, List[Entry]]: The same mapping with resolved 'output_name' fields in each
         file info dict.
     """
     logging.debug("[RESOLVE] Start of resolving duplicates and conflicts.")
@@ -131,20 +136,23 @@ def resolve_duplicates_and_conflicts(
         "[RESOLVE] Resolving duplicates and conflicts of files mapping: %s", files_map
     )
 
+    skipped_duplicates = 0
+
     output_name_tracker: defaultdict = defaultdict(dict)  # ext -> {name: hash}
     used_output_names: defaultdict = defaultdict(set)  # ext -> set of used output names
 
     for ext, file_list in files_map.items():
-        for file_info in file_list:
-            name = file_info["name"]
-            hash_sum = file_info["hash"]
+        for file_entry in file_list:
+            name = file_entry["name"]
+            hash_sum = file_entry["hash"]
 
             if name in output_name_tracker[ext]:
                 if output_name_tracker[ext][name] == hash_sum:
                     # Pure duplicate: same name and hash
-                    file_info["output_name"] = None  # Mark to skip
+                    file_entry["output_name"] = None  # Mark to skip
+                    skipped_duplicates += 1
                     logging.debug(
-                        "[RESOLVE] File '%s' is marked as duplicate.", file_info["path"]
+                        "[RESOLVE] File '%s' is marked as duplicate.", file_entry["path"]
                     )
                 else:
                     # Conflict: same name, different hash
@@ -164,35 +172,36 @@ def resolve_duplicates_and_conflicts(
                             if ext != "no_extension"
                             else f"{base_name}({counter})"
                         )
-                    file_info["output_name"] = new_name  # Save new unique name
+                    file_entry["output_name"] = new_name  # Save new unique name
                     logging.debug(
                         (
                             "[RESOLVE] File '%s' has name conflict, that will be "
                             "resolved by assigning a new name '%s' to the file."
                         ),
-                        file_info["path"],
+                        file_entry["path"],
                         new_name,
                     )
                     used_output_names[ext].add(new_name)  # Mark name as used
 
             else:
                 # Unique so far
-                file_info["output_name"] = name
+                file_entry["output_name"] = name
                 output_name_tracker[ext][name] = hash_sum
                 used_output_names[ext].add(name)
                 logging.debug(
-                    "[RESOLVE] File '%s' will remain it's original name '%s'.",
-                    file_info["path"],
-                    file_info["output_name"],
+                    "[RESOLVE] File '%s' will retain its original name '%s'.",
+                    file_entry["path"],
+                    file_entry["output_name"],
                 )
 
+    logging.info("[RESOLVE] Skipped %d pure duplicate files.", skipped_duplicates)
     logging.info("[RESOLVE] Duplicates and conflicts resolved successfully.")
 
     return files_map
 
 
 async def copy_files(
-    files_map_dict: dict[str, list[dict]],
+    files_map_dict: Dict[str, List[FileEntry]],
     target_dir_path: AsyncPath,
     target_str: str,
     dry_run: bool = False,
@@ -210,47 +219,46 @@ async def copy_files(
     failed_counter = 0
     semaphore = asyncio.Semaphore(5)  # limit how many coroutines run concurrently
 
-    async def copy_single_file(file_info: dict):
+    async def copy_single_file(file_entry: Dict):
         nonlocal copied_counter, failed_counter
 
         async with semaphore:
             # await asyncio.sleep(0.5)  # simulate delay
-            ext = get_file_extension(file_info["path"])
+            ext = get_file_extension(file_entry["path"])
             safe_ext = ext.lstrip(".").replace(".", "_") or "no_extension"
-            output_path = target_dir_path / safe_ext / file_info["output_name"]
+            output_path = target_dir_path / safe_ext / file_entry["output_name"]
             try:
-                await copy_file(file_info["path"], output_path)
+                await copy_file(file_entry["path"], output_path)
                 copied_counter += 1
                 print_copy_update(copied_counter, total_files, start_time)
                 logging.debug(
                     "[COPY] File '%s' copied from '%s' to '%s' ('%s' folder) as '%s'.",
-                    file_info["name"],
-                    file_info["path"],
+                    file_entry["name"],
+                    file_entry["path"],
                     output_path,
                     safe_ext,
-                    file_info["output_name"],
+                    file_entry["output_name"],
                 )
             except OSError as exc:
                 failed_counter += 1
                 logging.debug(
                     "[COPY] ❌ Failed to copy from '%s' to '%s': %s",
-                    file_info["path"],
+                    file_entry["path"],
                     output_path,
                     exc,
                 )
                 logging.warning(
                     "[COPY] ⚠️  Copying of file '%s' skipped due to error: %s",
-                    file_info["name"],
-                    file_info["path"],
+                    file_entry["name"],
+                    file_entry["path"],
                 )
 
     # Flatten and filter files that are not pure duplicates
-    all_files = [
-        file_info
-        for entries in files_map_dict.values()
-        for file_info in entries
-        if file_info.get("output_name")  # skip pure duplicates when value is None
-    ]
+    all_files = []
+    for entries in files_map_dict.values():
+        for file_entry in entries:
+            if file_entry.get("output_name"):  # skip pure duplicates when value is None
+                all_files.append(file_entry)
     total_files = len(all_files)
 
     if dry_run:
@@ -264,7 +272,7 @@ async def copy_files(
         print_dry_run_msg(total_files, total_folders, target_str)
         return
 
-    tasks = [copy_single_file(file_info) for file_info in all_files]
+    tasks = [copy_single_file(file_entry) for file_entry in all_files]
 
     logging.info("[COPY] Copying %s files into '%s'...", total_files, target_dir_path)
     await asyncio.gather(*tasks)

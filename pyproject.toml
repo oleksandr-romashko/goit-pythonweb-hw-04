@@ -6,11 +6,12 @@ authors = [
     {name = "Oleksandr Romashko",email = "alex.rmshk@gmail.com"}
 ]
 license = {text = "MIT"}
-requires-python = ">=3.13,<4"
+requires-python = ">=3.8,<3.12"
 dependencies = [
-    "aiopath (>=0.7.7,<0.8.0)",
-    "aioshutil (>=1.5,<2.0)",
-    "colorama (>=0.4.6,<0.5.0)"
+    "aiopath>=0.5.12,<0.6",
+    "aioshutil>=1.5,<2.0",
+    "colorama>=0.4.6,<0.5.0",
+    "tomli>=2.2.1; python_version < '3.11'"
 ]
 
 [project.urls]
@@ -18,7 +19,6 @@ Homepage = "https://github.com/oleksandr-romashko"
 
 [tool.poetry]
 package-mode = false
-
 
 [tool.poetry.group.dev.dependencies]
 types-colorama = "^0.4.15.20240311"

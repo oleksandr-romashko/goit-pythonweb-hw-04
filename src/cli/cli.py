@@ -4,6 +4,10 @@ Command handlers for the CLI.
 Defines and manages CLI subcommands and their logic.
 """
 
+from __future__ import annotations
+
+from argparse import Namespace
+
 from utils.project_meta import get_project_metadata
 
 from .parser import CustomArgumentParser
@@ -11,11 +15,11 @@ from .parser import CustomArgumentParser
 metadata = get_project_metadata()
 
 
-def parse_args():
+def parse_args() -> Namespace:
     """Parse application arguments."""
 
     parser = CustomArgumentParser(
-        app_title="📁 File Sorter",
+        app_title="🔀 File Sorter",
         subtitle="Sort and organize your files by extension",
         description=(
             f"v{metadata['version']}"
@@ -26,10 +30,12 @@ def parse_args():
             "\n  conflict - file with the same file name "
             "and different content (resolved by new name)"
         ),
-        epilog=[
-            f"Created by {metadata['author']}",
-            f"{metadata['homepage']}",
-        ],
+        epilog="\n".join(
+            [
+                f"Created by {metadata['author']}",
+                f"{metadata['homepage']}",
+            ]
+        ),
     )
     parser.add_argument("source", help="Source folder to scan and sort files from")
     parser.add_argument("target", help="Target folder to sort files into")

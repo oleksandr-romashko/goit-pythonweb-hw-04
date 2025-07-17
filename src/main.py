@@ -1,10 +1,13 @@
 """Entry point for the async CLI file sorter application."""
 
+from __future__ import annotations
+
 import asyncio
 import logging
 import sys
 
-from aiopath import AsyncPath  # type: ignore
+from aiopath import AsyncPath
+from argparse import Namespace
 import colorama
 
 from cli.cli import parse_args
@@ -65,7 +68,7 @@ async def sort_files(source_dir: str, target_dir: str, dry_run: bool = False) ->
 async def main() -> None:
     """Main async entry point: parses CLI args and starts sorting."""
     # Parse CLI arguments
-    args = parse_args()
+    args: Namespace = parse_args()
     source_dir: str = args.source
     target_dir: str = args.target
     debug: bool = args.debug
@@ -87,10 +90,11 @@ async def main() -> None:
 
     logging.debug("[APP] APPLICATION STOPPED.")
 
-
+# TODO: move some static console prints under console logger, info level, print for dynamic output only
 # TODO for enhancements and UX improvements:
 # 🔴 Critical: None
 # 🟡 Medium Priority:
+#    - Add testing, at least for core logic (may require breaking down some function into smaller ones)
 #    - Lowering the required version to 3.8+, or even 3.7+ if practical, for wider adoption,
 #      like uploading to PyPI, as example:
 #       - Replace `import tomllib` with `tomli` (Python <3.11)
@@ -105,8 +109,10 @@ async def main() -> None:
 #    - Package on PyPI for distribution. Purpose: Broader usage, distribution with
 #      global command registration in user system. Purpose: Quality-of-life for frequent users.
 # 🟢 Nice to Have:
-#    - Add feature: app arg --exclude to ignore certain file types (e.g. png, js, etc.)
+#    - Add feature: app arg --exclude to ignore certain file types (e.g., .png .js .log)
 #      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
+#    - Add default values to source improve UX
+#      Consider setting default='.' for source (or target) as fallback to current directory.
 #    - Adjustable concurrency with number of concurrent coroutines via --concurrency
 #      or auto (intelligent adaptation based on number of files, their total size,
 #      average size / max size per file).
@@ -127,6 +133,7 @@ async def main() -> None:
 #      (user centric, no need to check logs/app.log file - inconvenient)
 #      (Caution: may have many lines, so maybe just print last X lines/pages?)
 #      Note: currently is solved by --debug arg, but works for current run.
+#    - Add feature --verbose - CLI flag like to toggle DEBUG mode dynamically.
 # ⬤ Skipped:
 #    - Simple progress bar while copying █▒▒▒▒▒▒▒▒▒10%. Helps UX and perception of progress.
 #    - tqdm-style (library tqdm.asyncio) progress bar (async-compatible).

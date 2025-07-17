@@ -4,6 +4,8 @@ Logging configuration.
 Intended to be called at the start of the application to initialize logging behavior.
 """
 
+from __future__ import annotations
+
 import logging
 from logging.handlers import RotatingFileHandler
 import sys
@@ -56,12 +58,12 @@ def configure_logging(debug: bool = False, level: int = logging.INFO) -> None:
 
 
 def get_console_logger() -> logging.Logger:
-    """Colored console logger"""
+    """Return a logger configured for colored console output."""
 
     class ConsoleFormatter(logging.Formatter):
         """Custom formatter for console output with colored and prefixed log messages."""
 
-        def format(self, record):
+        def format(self, record: logging.LogRecord) -> str:
             """Format the log record with appropriate color and symbol based on log level."""
             if record.levelno == logging.WARNING:
                 msg = f"{Fore.YELLOW}⚠️  Warning: {record.getMessage()}{Style.RESET_ALL}"

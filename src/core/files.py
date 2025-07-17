@@ -5,9 +5,11 @@ Provides async functions to get file extensions, copy files,
 and validate source and target directory paths.
 """
 
+from __future__ import annotations
+
 import logging
 
-from aiopath import AsyncPath  # type: ignore
+from aiopath import AsyncPath
 import aioshutil
 
 from utils.logger_config import get_console_logger

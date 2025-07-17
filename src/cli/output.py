@@ -5,22 +5,25 @@ such as spinners, status messages, and error notices. Designed for an enhanced
 terminal user experience with color and emoji indicators.
 """
 
+from __future__ import annotations
+
 import time
+from typing import List, Optional, Dict
 
-from colorama import Style
+from colorama import Fore, Style
 
+from core.file_entry import FileEntry
 from utils.logger_config import get_console_logger
-
 
 console_logger = get_console_logger()
 
 
-def get_spinner_dots(start_time: float, spinner: list[str] | None = None) -> str:
+def get_spinner_dots(start_time: float, spinner: Optional[List[str]] = None) -> str:
     """Return the current spinner frame based on elapsed time.
 
     Args:
         start_time (float): The monotonic start time to calculate elapsed duration.
-        spinner (list[str], optional): A list of frames to use for the spinner.
+        spinner (List[str], optional): A list of frames to use for the spinner.
 
     Returns:
         str: The current frame in the spinner animation, padded for alignment.
@@ -66,10 +69,10 @@ def print_mapping_update(found_counter: int, start_time: float) -> None:
 
 
 def print_mapping_summary(
-    files_map: dict[str, list[dict]],
+    files_map: Dict[str, List[FileEntry]],
     time_to_execute: float,
     skipped_count: int = 0,
-):
+) -> None:
     """Print a summary of the file mapping and analysis process.
 
     Includes grouped counts per extension, along with statistics for duplicates,
@@ -80,10 +83,10 @@ def print_mapping_summary(
         time_to_execute (float): Total execution time in seconds.
         skipped_count (int, optional): Number of files skipped due to errors.
     """
-    total_files = 0
-    total_duplicates = 0
-    total_conflicts = 0
-    total_bytes_to_copy = 0
+    total_files: int = 0
+    total_duplicates: int = 0
+    total_conflicts: int = 0
+    total_bytes_to_copy: int = 0
 
     time_to_execute_str = f"{time_to_execute:.2f}s"
 
@@ -97,23 +100,23 @@ def print_mapping_summary(
         sorted_entries_by_newest = sorted(
             entries, key=lambda f: f["modified"], reverse=True
         )
-        for file_info in sorted_entries_by_newest:
-            output_name = file_info.get("output_name")
+        for file_entry in sorted_entries_by_newest:
+            output_name = file_entry.get("output_name")
             if output_name is None:  # Duplicate
                 ext_duplicates += 1
-            elif output_name != file_info["name"]:  # Conflict
+            elif output_name != file_entry["name"]:  # Conflict
                 ext_conflicts += 1
-                total_bytes_to_copy += file_info["size"]
+                total_bytes_to_copy += file_entry["size"]
             else:
-                total_bytes_to_copy += file_info["size"]
+                total_bytes_to_copy += file_entry["size"]
 
         duplicates_str = (
-            f"{ext_duplicates} duplicate" + ("s" if ext_duplicates != 1 else "")
+            f"{Fore.YELLOW}{ext_duplicates} duplicates{Style.RESET_ALL}"
             if ext_duplicates
             else ""
         )
         conflicts_str = (
-            f"{ext_conflicts} conflict{("s" if ext_conflicts != 1 else "")} resolved"
+            f"{Fore.GREEN}{ext_conflicts} conflict{('s' if ext_conflicts != 1 else '')} resolved{Style.RESET_ALL}"
             if ext_conflicts
             else ""
         )
@@ -166,7 +169,7 @@ def print_mapping_summary(
     print_line("")
 
 
-def print_copy_update(copied_counter: int, total_files: int, start_time: float):
+def print_copy_update(copied_counter: int, total_files: int, start_time: float) -> None:
     """Print a dynamic update showing the number of files copied so far.
 
     Args:
@@ -187,7 +190,7 @@ def print_copy_update(copied_counter: int, total_files: int, start_time: float):
 
 def print_copy_summary(
     files_number: int, target_path: str, time_to_execute: float, error_count: int = 0
-):
+) -> None:
     """Print a final summary after the file copy operation completes.
 
     Args:
@@ -209,7 +212,7 @@ def print_copy_summary(
     )
 
 
-def print_dry_run_msg(total_files: int, total_folders: int, target_path_str: str):
+def print_dry_run_msg(total_files: int, total_folders: int, target_path_str: str) -> None:
     """Print a message indicating that the dry run was successful."""
     print_line("✅ Dry run complete. Copying skipped. No files were copied.")
     print_line(
@@ -219,7 +222,7 @@ def print_dry_run_msg(total_files: int, total_folders: int, target_path_str: str
     )
 
 
-def print_interrupt_msg():
+def print_interrupt_msg() -> None:
     """Print a message indicating that execution was interrupted."""
     print_line()
     console_logger.warning(
