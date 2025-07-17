@@ -25,11 +25,11 @@ from core.files import (
 )
 from core.file_entry import FileEntry
 from cli.output import (
-    print_mapping_update,
-    print_mapping_summary,
-    print_copy_update,
-    print_dry_run_msg,
-    print_copy_summary,
+    print_dynamic_mapping_update,
+    show_mapping_summary,
+    print_dynamic_copy_update,
+    show_dry_run_msg,
+    show_copy_summary,
 )
 from utils.hash_calculator import get_file_hash
 
@@ -73,7 +73,7 @@ async def read_folder(
                     }
                     files_map[ext].append(file_entry)
                     found_counter += 1
-                    print_mapping_update(found_counter, start_time)
+                    print_dynamic_mapping_update(found_counter, start_time)
                 elif await entry.is_dir():
                     await walk_dir(entry)
             except OSError as exc:
@@ -95,7 +95,7 @@ async def read_folder(
     elapsed_time = time.monotonic() - start_time
 
     # Show summary
-    print_mapping_summary(files_map, elapsed_time, skipped_counter)
+    show_mapping_summary(files_map, elapsed_time, skipped_counter)
     logging.info(
         "[READ] Found %s files in %s at source folder: %s",
         (sum(len(files) for files in files_map.values())),
@@ -230,7 +230,7 @@ async def copy_files(
             try:
                 await copy_file(file_entry["path"], output_path)
                 copied_counter += 1
-                print_copy_update(copied_counter, total_files, start_time)
+                print_dynamic_copy_update(copied_counter, total_files, start_time)
                 logging.debug(
                     "[COPY] File '%s' copied from '%s' to '%s' ('%s' folder) as '%s'.",
                     file_entry["name"],
@@ -264,12 +264,12 @@ async def copy_files(
     if dry_run:
         total_folders = len(files_map_dict.values())
         # Skip coping any files, just show dry run message
+        show_dry_run_msg(total_files, total_folders, target_str)
         logging.debug(
             "[DRY RUN] Would copy %d files to '%s'",
             total_files,
             target_dir_path,
         )
-        print_dry_run_msg(total_files, total_folders, target_str)
         return
 
     tasks = [copy_single_file(file_entry) for file_entry in all_files]
@@ -278,7 +278,7 @@ async def copy_files(
     await asyncio.gather(*tasks)
 
     elapsed_time = time.monotonic() - start_time
-    print_copy_summary(copied_counter, target_str, elapsed_time, failed_counter)
+    show_copy_summary(copied_counter, target_str, elapsed_time, failed_counter)
     logging.info(
         "[COPY] %d files copied successfully into target '%s' in %s.",
         copied_counter,

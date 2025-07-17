@@ -53,12 +53,15 @@ def print_line(
     print(f"{prefix}{message}", end=end, flush=True)
 
 
-def print_mapping_update(found_counter: int, start_time: float) -> None:
-    """Print a dynamic update showing how many files were found so far.
+def print_dynamic_mapping_update(found_counter: int, start_time: float) -> None:
+    """
+    Print a dynamic update showing how many files were found so far.
+
+    Overwrites the previous line to provide a live-updating effect.
 
     Args:
-        found_counter (int): The number of files found.
-        start_time (float): The start time for calculating spinner frame.
+        found_counter (int): Number of files found.
+        start_time (float): Start time for spinner animation.
     """
     spinner_frame = get_spinner_dots(start_time)
     print_line(
@@ -68,7 +71,7 @@ def print_mapping_update(found_counter: int, start_time: float) -> None:
     )
 
 
-def print_mapping_summary(
+def show_mapping_summary(
     files_map: Dict[str, List[FileEntry]],
     time_to_execute: float,
     skipped_count: int = 0,
@@ -90,7 +93,10 @@ def print_mapping_summary(
 
     time_to_execute_str = f"{time_to_execute:.2f}s"
 
-    print_line("📁 Files grouped by extension:", overwrite_prev_line=True)
+    
+    print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
+
+    console_logger.info("📁 Files grouped by extension:")
     for extension, entries in sorted(files_map.items()):
         ext_total = len(entries)
         ext_duplicates = 0
@@ -123,8 +129,7 @@ def print_mapping_summary(
 
         per_ext_summary = ", ".join(filter(None, [duplicates_str, conflicts_str]))
         per_ext_summary_str = f" ({per_ext_summary})" if per_ext_summary else ""
-
-        print_line(
+        console_logger.info(
             f"  {extension.ljust(12)} {ext_total} files{per_ext_summary_str}",
         )
 
@@ -132,7 +137,7 @@ def print_mapping_summary(
         total_duplicates += ext_duplicates
         total_conflicts += ext_conflicts
 
-    # Extra empty line
+    # Extra empty line to separate summary
     print_line("")
 
     # Skipped files
@@ -155,7 +160,7 @@ def print_mapping_summary(
         )
 
     extras_str = f" ({', '.join(extras)})" if extras else ""
-    print_line(
+    console_logger.info(
         f"✅ Found {Style.BRIGHT}{total_files} files{Style.RESET_ALL} "
         f"in {time_to_execute_str}{extras_str}",
     )
@@ -163,13 +168,13 @@ def print_mapping_summary(
     # Size to copy
     if total_bytes_to_copy > 0:
         total_mb = total_bytes_to_copy / (1024 * 1024)
-        print_line(f"📦 Estimated total to copy: {total_mb:.2f} MB")
+        console_logger.info(f"📦 Estimated total to copy: {total_mb:.2f} MB")
 
-    # Extra empty line
+    # Extra empty line before further dynamic update
     print_line("")
 
 
-def print_copy_update(copied_counter: int, total_files: int, start_time: float) -> None:
+def print_dynamic_copy_update(copied_counter: int, total_files: int, start_time: float) -> None:
     """Print a dynamic update showing the number of files copied so far.
 
     Args:
@@ -188,7 +193,7 @@ def print_copy_update(copied_counter: int, total_files: int, start_time: float) 
     )
 
 
-def print_copy_summary(
+def show_copy_summary(
     files_number: int, target_path: str, time_to_execute: float, error_count: int = 0
 ) -> None:
     """Print a final summary after the file copy operation completes.
@@ -201,28 +206,27 @@ def print_copy_summary(
     """
     time_to_execute_str = f"{time_to_execute:.2f}s"
     errors_str = f"\n⚠️  Failed to copy {error_count} files" if error_count else ""
-    print_line(
-        (
-            f"✅ Copied {Style.BRIGHT}{files_number} files{Style.RESET_ALL} "
-            f"into '{Style.BRIGHT}{target_path}{Style.RESET_ALL}' folder "
-            f"in {time_to_execute_str}"
-            f"{errors_str}"
-        ),
-        overwrite_prev_line=True,
+    print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
+    console_logger.info(
+        f"✅ Copied {Style.BRIGHT}{files_number} files{Style.RESET_ALL} "
+        f"into '{Style.BRIGHT}{target_path}{Style.RESET_ALL}' folder "
+        f"in {time_to_execute_str}"
+        f"{errors_str}"
     )
 
 
-def print_dry_run_msg(total_files: int, total_folders: int, target_path_str: str) -> None:
+def show_dry_run_msg(total_files: int, total_folders: int, target_path_str: str) -> None:
     """Print a message indicating that the dry run was successful."""
-    print_line("✅ Dry run complete. Copying skipped. No files were copied.")
-    print_line(
+    print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
+    console_logger.info("✅ Dry run complete. Copying skipped. No files were copied.")
+    console_logger.info(
         f"☝️  Would copy {Style.BRIGHT}{total_files} files{Style.RESET_ALL} "
         f"into {Style.BRIGHT}{total_folders} folders{Style.RESET_ALL} "
         f"at '{Style.BRIGHT}{target_path_str}{Style.RESET_ALL}'."
     )
 
 
-def print_interrupt_msg() -> None:
+def show_interrupt_msg() -> None:
     """Print a message indicating that execution was interrupted."""
     print_line()
     console_logger.warning(

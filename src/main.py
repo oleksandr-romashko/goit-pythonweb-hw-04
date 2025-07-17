@@ -11,7 +11,7 @@ from argparse import Namespace
 import colorama
 
 from cli.cli import parse_args
-from cli.output import print_interrupt_msg
+from cli.output import show_interrupt_msg
 from core.files import validate_source_dir, validate_target_dir
 from core.sorter import read_folder, copy_files
 from utils.exit_codes import ExitCode
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print_interrupt_msg()
+        show_interrupt_msg()
         logging.info("[APP] User interrupted execution with Ctrl+C. Exiting app...")
         sys.exit(ExitCode.SUCCESS)
     except Exception as e:
