@@ -24,7 +24,7 @@ from file_ext_sorter.core.files import (
     copy_file,
 )
 from file_ext_sorter.core.file_entry import FileEntry
-from file_ext_sorter.cli.output import (
+from file_ext_sorter.cli.cli_output import (
     print_dynamic_mapping_update,
     show_mapping_summary,
     print_dynamic_copy_update,

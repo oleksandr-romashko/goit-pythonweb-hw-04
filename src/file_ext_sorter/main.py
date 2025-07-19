@@ -13,7 +13,7 @@ import colorama
 from file_ext_sorter.core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 from file_ext_sorter.cli.cli import parse_args
-from file_ext_sorter.cli.output import show_interrupt_msg
+from file_ext_sorter.cli.cli_output import show_interrupt_msg
 from file_ext_sorter.core.files import validate_source_dir, validate_output_dir
 from file_ext_sorter.core.sorter import read_folder, copy_files
 from file_ext_sorter.utils.exit_codes import ExitCode
