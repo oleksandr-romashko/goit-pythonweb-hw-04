@@ -93,7 +93,6 @@ async def main() -> None:
     logging.debug("[APP] APPLICATION STOPPED.")
 
 
-# TODO: move static console prints under console logger, info level, print for dynamic output only
 # TODO for enhancements and UX improvements:
 # 🔴 Critical: None
 # 🟡 Medium Priority:
