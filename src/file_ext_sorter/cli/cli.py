@@ -8,7 +8,7 @@ from __future__ import annotations  # Enables lazy type evaluation (needed for f
 
 from argparse import Namespace
 
-from utils.project_meta import get_project_metadata
+from file_ext_sorter.utils.project_meta import get_project_metadata
 
 from .parser import CustomArgumentParser
 

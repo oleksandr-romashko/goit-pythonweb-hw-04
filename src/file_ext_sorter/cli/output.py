@@ -12,8 +12,8 @@ from typing import List, Optional, Dict
 
 from colorama import Fore, Style
 
-from core.file_entry import FileEntry
-from utils.logger_config import get_console_logger
+from file_ext_sorter.core.file_entry import FileEntry
+from file_ext_sorter.utils.logger_config import get_console_logger
 
 console_logger = get_console_logger()
 

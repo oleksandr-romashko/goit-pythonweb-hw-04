@@ -43,10 +43,10 @@ files = [
 name = "tomli"
 version = "2.2.1"
 description = "A lil' TOML parser"
-optional = true
+optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_version < \"3.11\" and extra == \"legacy\""
+markers = "python_version < \"3.11\""
 files = [
     {file = "tomli-2.2.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:678e4fa69e4575eb77d103de3df8a895e1591b48e740211bd1067378c69e8249"},
     {file = "tomli-2.2.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:023aa114dd824ade0100497eb2318602af309e5a55595f76b626d6d9f3b7b0a6"},
@@ -110,9 +110,8 @@ files = [
 
 [extras]
 dev = ["types-colorama"]
-legacy = ["tomli"]
 
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.8, <3.15"
-content-hash = "e3c74e13dcfbd10e2beb7001a5d6ee7a2397f04c6476361071063625052374ad"
+content-hash = "604626cad9608103886980adec6b1e7f5c6ccf9344f65cabc99e72d12e6aaf8f"

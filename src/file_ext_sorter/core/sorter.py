@@ -19,19 +19,19 @@ from typing import List, Dict
 
 from .myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
-from core.files import (
+from file_ext_sorter.core.files import (
     get_file_extension,
     copy_file,
 )
-from core.file_entry import FileEntry
-from cli.output import (
+from file_ext_sorter.core.file_entry import FileEntry
+from file_ext_sorter.cli.output import (
     print_dynamic_mapping_update,
     show_mapping_summary,
     print_dynamic_copy_update,
     show_dry_run_msg,
     show_copy_summary,
 )
-from utils.hash_calculator import get_file_hash
+from file_ext_sorter.utils.hash_calculator import get_file_hash
 
 
 async def read_folder(

@@ -5,7 +5,7 @@ from __future__ import annotations  # Enables lazy type evaluation (needed for f
 import hashlib
 from typing import cast
 
-from core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
+from file_ext_sorter.core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 
 async def get_file_hash(file_path: AsyncPath, chunk_size: int = 65536) -> str:

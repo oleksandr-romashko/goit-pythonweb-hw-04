@@ -10,14 +10,14 @@ from argparse import Namespace
 
 import colorama
 
-from core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
+from file_ext_sorter.core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
-from cli.cli import parse_args
-from cli.output import show_interrupt_msg
-from core.files import validate_source_dir, validate_target_dir
-from core.sorter import read_folder, copy_files
-from utils.exit_codes import ExitCode
-from utils.logger_config import configure_logging, get_console_logger
+from file_ext_sorter.cli.cli import parse_args
+from file_ext_sorter.cli.output import show_interrupt_msg
+from file_ext_sorter.core.files import validate_source_dir, validate_target_dir
+from file_ext_sorter.core.sorter import read_folder, copy_files
+from file_ext_sorter.utils.exit_codes import ExitCode
+from file_ext_sorter.utils.logger_config import configure_logging, get_console_logger
 
 colorama.init(autoreset=True)
 
@@ -67,8 +67,8 @@ async def sort_files(source_dir: str, target_dir: str, dry_run: bool = False) ->
     await copy_files(mapped_files_dict, target_dir_path, target_dir, dry_run)
 
 
-async def main() -> None:
-    """Main async entry point: parses CLI args and starts sorting."""
+async def run_file_sorter() -> None:
+    """Run app: parses CLI args and starts sorting."""
     # Parse CLI arguments
     args: Namespace = parse_args()
     source_dir: str = args.source
@@ -92,6 +92,20 @@ async def main() -> None:
 
     logging.debug("[APP] APPLICATION STOPPED.")
 
+def main():
+    """Main entry point"""
+    try:
+        asyncio.run(run_file_sorter())
+    except KeyboardInterrupt:
+        show_interrupt_msg()
+        logging.info("[APP] User interrupted execution with Ctrl+C. Exiting app...")
+        sys.exit(ExitCode.SUCCESS)
+    except Exception as e:
+        console_logger.error(
+            "Unexpected error occurred. Please use --debug flag to see detailed logs. Exiting..."
+        )
+        logging.error("[APP] Unhandled exception: %s", e, exc_info=True)
+        sys.exit(ExitCode.GENERAL_ERROR)
 
 # TODO for enhancements and UX improvements:
 # 🔴 Critical: None
@@ -103,6 +117,7 @@ async def main() -> None:
 # 🟢 Nice to Have:
 #    - Add feature: app arg --exclude to ignore certain file types (e.g., .png .js .log)
 #      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
+#    - Consider whitelist/blacklist (--include/--exclude) for the certain file types.
 #    - Add default values to source improve UX
 #      Consider setting default='.' for source (or target) as fallback to current directory.
 #    - Adjustable concurrency with number of concurrent coroutines via --concurrency
@@ -131,15 +146,4 @@ async def main() -> None:
 #    - tqdm-style (library tqdm.asyncio) progress bar (async-compatible).
 #      Slick UX, more detailed than x/y.
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        show_interrupt_msg()
-        logging.info("[APP] User interrupted execution with Ctrl+C. Exiting app...")
-        sys.exit(ExitCode.SUCCESS)
-    except Exception as e:
-        console_logger.error(
-            "Unexpected error occurred. Please use --debug flag to see detailed logs. Exiting..."
-        )
-        logging.error("[APP] Unhandled exception: %s", e, exc_info=True)
-        sys.exit(ExitCode.GENERAL_ERROR)
+    main()

@@ -13,7 +13,7 @@ import aioshutil
 
 from .myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
-from utils.logger_config import get_console_logger
+from file_ext_sorter.utils.logger_config import get_console_logger
 
 
 console_logger = get_console_logger()
