@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": "./assets/test_files/source/ ./assets/test_files/target/"
+            "args": "./assets/test_files/source/ ./assets/test_files/output/"
         }
     ]
 }

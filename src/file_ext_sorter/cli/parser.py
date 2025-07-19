@@ -100,14 +100,14 @@ class CustomArgumentParser(argparse.ArgumentParser):
         is_windows = platform.system() == "Windows"
 
         usage_cmd = (
-            f"python {self.prog} <source> <target>"
+            f"python {self.prog} <source> <output>"
             if is_windows
-            else f"python3 ./{self.prog} <source> <target>"
+            else f"python3 ./{self.prog} <source> <output>"
         )
         example_cmd = (
-            f"python {self.prog} path\\to\\sources\\dir path\\to\\target\\dir"
+            f"python {self.prog} path\\to\\sources\\dir path\\to\\output\\dir"
             if is_windows
-            else f"python3 ./{self.prog} ./path/to/sources/dir ./path/to/target/dir"
+            else f"python3 ./{self.prog} ./path/to/sources/dir ./path/to/output/dir"
         )
         return "\n".join(
             [

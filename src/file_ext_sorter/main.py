@@ -14,7 +14,7 @@ from file_ext_sorter.core.myaiopath import AsyncPath  # custom replacement for a
 
 from file_ext_sorter.cli.cli import parse_args
 from file_ext_sorter.cli.output import show_interrupt_msg
-from file_ext_sorter.core.files import validate_source_dir, validate_target_dir
+from file_ext_sorter.core.files import validate_source_dir, validate_output_dir
 from file_ext_sorter.core.sorter import read_folder, copy_files
 from file_ext_sorter.utils.exit_codes import ExitCode
 from file_ext_sorter.utils.logger_config import configure_logging, get_console_logger
@@ -24,47 +24,47 @@ colorama.init(autoreset=True)
 console_logger = get_console_logger()
 
 
-async def sort_files(source_dir: str, target_dir: str, dry_run: bool = False) -> None:
+async def sort_files(source_dir: str, output_dir: str, dry_run: bool = False) -> None:
     """
-    Sort files from source directory into structured folders in the target location.
+    Sort files from source directory into structured folders in the output location.
 
     Args:
         source_dir: Path to the directory with unsorted files.
-        target_dir: Path where sorted files will be placed.
+        output_dir: Path where sorted files will be placed.
         dry_run: Flag for dry-run simulation without actual files copying
     """
     logging.info(
-        "[SORTING] Start sorting files with app args: source '%s' and target '%s'.",
+        "[SORTING] Start sorting files with app args: source '%s' and output '%s'.",
         source_dir,
-        target_dir,
+        output_dir,
     )
 
     # Resolve real paths
     source_dir_path = await AsyncPath(source_dir).resolve()
-    target_dir_path = await AsyncPath(target_dir).resolve()
+    output_dir_path = await AsyncPath(output_dir).resolve()
     logging.debug(
         "[SORTING] Source path '%s' resolved: %s", source_dir, source_dir_path
     )
     logging.debug(
-        "[SORTING] Target path '%s' resolved: %s", target_dir, target_dir_path
+        "[SORTING] Output path '%s' resolved: %s", output_dir, output_dir_path
     )
 
     # Validate paths
     if not await validate_source_dir(source_dir_path, source_dir):
         sys.exit(ExitCode.SOURCE_VALIDATION_ERROR)
-    if not await validate_target_dir(target_dir_path, target_dir):
-        sys.exit(ExitCode.TARGET_VALIDATION_ERROR)
+    if not await validate_output_dir(output_dir_path, output_dir):
+        sys.exit(ExitCode.OUTPUT_VALIDATION_ERROR)
     logging.debug(
-        "[VALIDATION] Source path '%s' and target path '%s' validated successfully.",
+        "[VALIDATION] Source path '%s' and output path '%s' validated successfully.",
         source_dir_path,
-        target_dir_path,
+        output_dir_path,
     )
 
     # Scan and categorize files
     mapped_files_dict = await read_folder(source_dir_path)
 
     # Copy files to structured folders
-    await copy_files(mapped_files_dict, target_dir_path, target_dir, dry_run)
+    await copy_files(mapped_files_dict, output_dir_path, output_dir, dry_run)
 
 
 async def run_file_sorter() -> None:
@@ -72,7 +72,7 @@ async def run_file_sorter() -> None:
     # Parse CLI arguments
     args: Namespace = parse_args()
     source_dir: str = args.source
-    target_dir: str = args.target
+    output_dir: str = args.output
     debug: bool = args.debug
     dry_run: bool = args.dry_run
 
@@ -88,7 +88,7 @@ async def run_file_sorter() -> None:
     logging.debug("[APP] APPLICATION STARTED.")
 
     # Call the main app logic
-    await sort_files(source_dir, target_dir, dry_run=dry_run)
+    await sort_files(source_dir, output_dir, dry_run=dry_run)
 
     logging.debug("[APP] APPLICATION STOPPED.")
 
@@ -108,7 +108,9 @@ def main():
         sys.exit(ExitCode.GENERAL_ERROR)
 
 # TODO for enhancements and UX improvements:
-# 🔴 Critical: None
+# 🔴 Critical:
+#    - Fix launch settings for debugging for VS Code
+#    - Fix code example in help using substitution of actual app command name and not using python
 # 🟡 Medium Priority:
 #    - Add testing, at least for core logic (may require breaking down some function
 #      into smaller ones)
@@ -119,7 +121,7 @@ def main():
 #      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
 #    - Consider whitelist/blacklist (--include/--exclude) for the certain file types.
 #    - Add default values to source improve UX
-#      Consider setting default='.' for source (or target) as fallback to current directory.
+#      Consider setting default='.' for source (or output) as fallback to current directory.
 #    - Adjustable concurrency with number of concurrent coroutines via --concurrency
 #      or auto (intelligent adaptation based on number of files, their total size,
 #      average size / max size per file).

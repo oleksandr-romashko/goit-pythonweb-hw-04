@@ -2,7 +2,7 @@
 File handling utilities.
 
 Provides async functions to get file extensions, copy files,
-and validate source and target directory paths.
+and validate source and output directory paths.
 """
 
 from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
@@ -88,27 +88,27 @@ async def validate_source_dir(path: AsyncPath, origin_path_str: str) -> bool:
     return True
 
 
-async def validate_target_dir(path: AsyncPath, origin_path_str: str) -> bool:
-    """Validate that the target path is either non-existent or a directory."""
+async def validate_output_dir(path: AsyncPath, origin_path_str: str) -> bool:
+    """Validate that the output path is either non-existent or a directory."""
     if await validate_path_exists(path):
         if not await validate_path_is_dir(path):
             console_logger.error(
-                "Target path '%s' should be a folder.", origin_path_str
+                "Output path '%s' should be a folder.", origin_path_str
             )
             logging.error(
-                "[VALIDATION] ❌ Target path '%s' exists at '%s' and should be a folder.",
+                "[VALIDATION] ❌ Output path '%s' exists at '%s' and should be a folder.",
                 origin_path_str,
                 path,
             )
             return False
         logging.info(
-            "[VALIDATION] Target path '%s' exists at '%s'. Using existing target folder.",
+            "[VALIDATION] Output path '%s' exists at '%s'. Using existing output folder.",
             origin_path_str,
             path,
         )
     else:
         logging.info(
-            "[VALIDATION] Target path '%s' not found at '%s' and will be created.",
+            "[VALIDATION] Output path '%s' not found at '%s' and new output folder will be created.",
             origin_path_str,
             path,
         )

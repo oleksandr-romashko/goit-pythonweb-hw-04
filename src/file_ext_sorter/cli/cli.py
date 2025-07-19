@@ -24,7 +24,7 @@ def parse_args() -> Namespace:
         description=(
             f"v{metadata['version']}"
             "\n\nThis CLI tool scans a source directory and copies files into "
-            "subfolders in the target directory based on file extensions."
+            "subfolders in the output directory based on file extensions."
             "\n\nNotes on terminology:"
             "\n  duplicate - file with the same file name and content (skipped from copying)"
             "\n  conflict - file with the same file name "
@@ -38,7 +38,7 @@ def parse_args() -> Namespace:
         ),
     )
     parser.add_argument("source", help="Source folder to scan and sort files from")
-    parser.add_argument("target", help="Target folder to sort files into")
+    parser.add_argument("output", help="Output folder to sort files into")
     parser.add_argument(
         "--dry-run",
         action="store_true",

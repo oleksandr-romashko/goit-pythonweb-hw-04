@@ -198,13 +198,13 @@ def print_dynamic_copy_update(
 
 
 def show_copy_summary(
-    files_number: int, target_path: str, time_to_execute: float, error_count: int = 0
+    files_number: int, output_path: str, time_to_execute: float, error_count: int = 0
 ) -> None:
     """Print a final summary after the file copy operation completes.
 
     Args:
         files_number (int): Total number of files copied.
-        target_path (str): Destination directory path.
+        output_path (str): Destination directory path.
         time_to_execute (float): Duration of the copy operation.
         error_count (int, optional): Number of copy failures.
     """
@@ -213,14 +213,14 @@ def show_copy_summary(
     print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
     console_logger.info(
         f"✅ Copied {Style.BRIGHT}{files_number} files{Style.RESET_ALL} "
-        f"into '{Style.BRIGHT}{target_path}{Style.RESET_ALL}' folder "
+        f"into '{Style.BRIGHT}{output_path}{Style.RESET_ALL}' folder "
         f"in {time_to_execute_str}"
         f"{errors_str}"
     )
 
 
 def show_dry_run_msg(
-    total_files: int, total_folders: int, target_path_str: str
+    total_files: int, total_folders: int, output_path_str: str
 ) -> None:
     """Print a message indicating that the dry run was successful."""
     print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
@@ -228,7 +228,7 @@ def show_dry_run_msg(
     console_logger.info(
         f"☝️  Would copy {Style.BRIGHT}{total_files} files{Style.RESET_ALL} "
         f"into {Style.BRIGHT}{total_folders} folders{Style.RESET_ALL} "
-        f"at '{Style.BRIGHT}{target_path_str}{Style.RESET_ALL}'."
+        f"at '{Style.BRIGHT}{output_path_str}{Style.RESET_ALL}'."
     )
 
 

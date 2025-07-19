@@ -5,7 +5,7 @@ This module provides functionality to:
 - Recursively scan a directory and group files by extension.
 - Generate SHA-256 hashes for uniqueness checks.
 - Resolve filename duplicates and conflicts.
-- Copy files to a target directory while preserving uniqueness.
+- Copy files to a output directory while preserving uniqueness.
 - Provide real-time CLI and logging feedback.
 """
 
@@ -203,13 +203,13 @@ def resolve_duplicates_and_conflicts(
 
 async def copy_files(
     files_map_dict: Dict[str, List[FileEntry]],
-    target_dir_path: AsyncPath,
-    target_str: str,
+    output_dir_path: AsyncPath,
+    output_str: str,
     dry_run: bool = False,
 ) -> None:
-    """Copy mapped files into target directory."""
+    """Copy mapped files into output directory."""
     logging.info(
-        "[COPY] Start of copying files into target folder: %s", target_dir_path
+        "[COPY] Start of copying files into output folder: %s", output_dir_path
     )
     logging.debug("[COPY] Copying files of files mapping: %s", files_map_dict)
 
@@ -232,7 +232,7 @@ async def copy_files(
             try:
                 if output_name is None:
                     raise ValueError("output_name can't be None")
-                output_path = target_dir_path / safe_ext / output_name
+                output_path = output_dir_path / safe_ext / output_name
                 await copy_file(file_entry["path"], output_path)
                 copied_counter += 1
                 print_dynamic_copy_update(copied_counter, total_files, start_time)
@@ -269,24 +269,24 @@ async def copy_files(
     if dry_run:
         total_folders = len(files_map_dict.values())
         # Skip coping any files, just show dry run message
-        show_dry_run_msg(total_files, total_folders, target_str)
+        show_dry_run_msg(total_files, total_folders, output_str)
         logging.debug(
             "[DRY RUN] Would copy %d files to '%s'",
             total_files,
-            target_dir_path,
+            output_dir_path,
         )
         return
 
     tasks = [copy_single_file(file_entry) for file_entry in all_files]
 
-    logging.info("[COPY] Copying %s files into '%s'...", total_files, target_dir_path)
+    logging.info("[COPY] Copying %s files into '%s'...", total_files, output_dir_path)
     await asyncio.gather(*tasks)
 
     elapsed_time = time.monotonic() - start_time
-    show_copy_summary(copied_counter, target_str, elapsed_time, failed_counter)
+    show_copy_summary(copied_counter, output_str, elapsed_time, failed_counter)
     logging.info(
-        "[COPY] %d files copied successfully into target '%s' in %s.",
+        "[COPY] %d files copied successfully into output '%s' in %s.",
         copied_counter,
-        target_dir_path,
+        output_dir_path,
         f"{elapsed_time:.2f}s",
     )
