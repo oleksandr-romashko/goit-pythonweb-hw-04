@@ -1,4 +1,5 @@
-"""Handles formatted CLI output for file processing tasks.
+"""
+Handles formatted CLI output for file processing tasks.
 
 Includes functions for printing progress updates, summaries, and user feedback
 such as spinners, status messages, and error notices. Designed for an enhanced
