@@ -8,7 +8,7 @@ license = { text = "MIT" }
 authors = [
   { name = "Oleksandr Romashko", email = "alex.rmshk@gmail.com" }
 ]
-requires-python = ">=3.8,<3.12"
+requires-python = ">=3.8, <3.15"
 dynamic = ["dependencies"]  # suppress poetry dependencies warning
 
 [project.urls]
@@ -20,6 +20,7 @@ packages = [{ include = "src" }]
 package-mode = false
 
 [tool.poetry.dependencies]
+python = ">=3.8,<3.15"
 aiofiles = ">=24.1.0,<25.0.0"
 aioshutil = ">=1.5,<2.0"
 tomli = { version = ">=2.2.1", python = "<3.11" }
