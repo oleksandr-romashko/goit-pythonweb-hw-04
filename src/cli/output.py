@@ -5,7 +5,7 @@ such as spinners, status messages, and error notices. Designed for an enhanced
 terminal user experience with color and emoji indicators.
 """
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import time
 from typing import List, Optional, Dict
@@ -93,7 +93,6 @@ def show_mapping_summary(
 
     time_to_execute_str = f"{time_to_execute:.2f}s"
 
-    
     print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
 
     console_logger.info("📁 Files grouped by extension:")
@@ -122,7 +121,10 @@ def show_mapping_summary(
             else ""
         )
         conflicts_str = (
-            f"{Fore.GREEN}{ext_conflicts} conflict{('s' if ext_conflicts != 1 else '')} resolved{Style.RESET_ALL}"
+            (
+                f"{Fore.GREEN}{ext_conflicts} conflict{('s' if ext_conflicts != 1 else '')} "
+                f"resolved{Style.RESET_ALL}"
+            )
             if ext_conflicts
             else ""
         )
@@ -174,7 +176,9 @@ def show_mapping_summary(
     print_line("")
 
 
-def print_dynamic_copy_update(copied_counter: int, total_files: int, start_time: float) -> None:
+def print_dynamic_copy_update(
+    copied_counter: int, total_files: int, start_time: float
+) -> None:
     """Print a dynamic update showing the number of files copied so far.
 
     Args:
@@ -215,7 +219,9 @@ def show_copy_summary(
     )
 
 
-def show_dry_run_msg(total_files: int, total_folders: int, target_path_str: str) -> None:
+def show_dry_run_msg(
+    total_files: int, total_folders: int, target_path_str: str
+) -> None:
     """Print a message indicating that the dry run was successful."""
     print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
     console_logger.info("✅ Dry run complete. Copying skipped. No files were copied.")

@@ -5,19 +5,22 @@ Uses the built-in `tomllib` module (Python 3.11+) to read version, author,
 email, description, urls, etc. from the `pyproject.toml` sections.
 """
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import logging
 from typing import TypedDict
 
 try:
     # Note: `tomllib` is only available in Python 3.11+ (as part of Python default modules).
-    import tomllib  # type: ignore[import-unresolved]  # noqa
+    import tomllib  # type: ignore[import-not-found]
 except ModuleNotFoundError:
     # For Python <3.11, `tomli` is used instead (declared in pyproject.toml).
-    import tomli as tomllib  # type: ignore  # noqa
+    import tomli as tomllib  # type: ignore[no-redef]
+
 
 class ProjectMetadata(TypedDict):
+    """Project metadata parsed from pyproject.toml."""
+
     version: str
     author: str
     email: str
@@ -55,6 +58,4 @@ def get_project_metadata() -> ProjectMetadata:
             }
     except (FileNotFoundError, tomllib.TOMLDecodeError, KeyError) as exc:
         logging.error("Cannot read metadata from pyproject.toml: %s", exc)
-        raise RuntimeError(
-            f"Cannot read metadata from pyproject.toml: {exc}"
-        ) from exc
+        raise RuntimeError(f"Cannot read metadata from pyproject.toml: {exc}") from exc

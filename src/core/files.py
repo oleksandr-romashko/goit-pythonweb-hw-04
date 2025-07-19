@@ -5,12 +5,13 @@ Provides async functions to get file extensions, copy files,
 and validate source and target directory paths.
 """
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import logging
 
-from aiopath import AsyncPath
 import aioshutil
+
+from .myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 from utils.logger_config import get_console_logger
 

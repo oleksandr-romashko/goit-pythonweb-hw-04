@@ -1,14 +1,16 @@
 """Entry point for the async CLI file sorter application."""
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import asyncio
 import logging
 import sys
-
-from aiopath import AsyncPath
 from argparse import Namespace
+
+
 import colorama
+
+from core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 from cli.cli import parse_args
 from cli.output import show_interrupt_msg
@@ -90,11 +92,13 @@ async def main() -> None:
 
     logging.debug("[APP] APPLICATION STOPPED.")
 
-# TODO: move some static console prints under console logger, info level, print for dynamic output only
+
+# TODO: move static console prints under console logger, info level, print for dynamic output only
 # TODO for enhancements and UX improvements:
 # 🔴 Critical: None
 # 🟡 Medium Priority:
-#    - Add testing, at least for core logic (may require breaking down some function into smaller ones)
+#    - Add testing, at least for core logic (may require breaking down some function
+#      into smaller ones)
 #    - Package on PyPI for distribution. Purpose: Broader usage, distribution with
 #      global command registration in user system. Purpose: Quality-of-life for frequent users.
 # 🟢 Nice to Have:
@@ -135,6 +139,8 @@ if __name__ == "__main__":
         logging.info("[APP] User interrupted execution with Ctrl+C. Exiting app...")
         sys.exit(ExitCode.SUCCESS)
     except Exception as e:
-        console_logger.error("Unexpected error occurred. Exiting...")
+        console_logger.error(
+            "Unexpected error occurred. Please use --debug flag to see detailed logs. Exiting..."
+        )
         logging.error("[APP] Unhandled exception: %s", e, exc_info=True)
         sys.exit(ExitCode.GENERAL_ERROR)

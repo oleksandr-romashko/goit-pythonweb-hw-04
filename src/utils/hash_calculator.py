@@ -1,11 +1,11 @@
 """Utility for calculating hash of files."""
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
-from typing import cast
 import hashlib
+from typing import cast
 
-from aiopath import AsyncPath
+from core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 
 async def get_file_hash(file_path: AsyncPath, chunk_size: int = 65536) -> str:
@@ -20,7 +20,9 @@ async def get_file_hash(file_path: AsyncPath, chunk_size: int = 65536) -> str:
         The SHA-256 hash of the file as a hexadecimal string.
     """
     hash_sha256 = hashlib.sha256()
+
     async with file_path.open("rb") as f:
-        while chunk:= cast(bytes, await f.read(chunk_size)):
+        while chunk := cast(bytes, await f.read(chunk_size)):
             hash_sha256.update(chunk)
+
     return hash_sha256.hexdigest()

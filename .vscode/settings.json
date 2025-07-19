@@ -1,9 +1,16 @@
 {
     "cSpell.words": [
+        "aiofiles",
         "aiopath",
         "aioshutil",
+        "closefd",
+        "colorama",
+        "fspath",
         "levelname",
         "levelno",
-        "subfolders"
+        "myaiopath",
+        "redef",
+        "subfolders",
+        "tomli"
     ]
 }

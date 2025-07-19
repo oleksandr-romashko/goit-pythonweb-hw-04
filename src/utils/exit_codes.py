@@ -3,7 +3,7 @@
 Defines standard exit codes to indicate different termination reasons.
 """
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 from enum import IntEnum
 

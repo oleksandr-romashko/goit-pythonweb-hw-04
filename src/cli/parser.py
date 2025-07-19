@@ -5,7 +5,7 @@ Provides colored usage, subtitles, and optional epilog support
 for a better CLI user experience.
 """
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import argparse
 import platform

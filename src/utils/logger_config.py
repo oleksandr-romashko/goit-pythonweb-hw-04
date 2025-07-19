@@ -4,7 +4,7 @@ Logging configuration.
 Intended to be called at the start of the application to initialize logging behavior.
 """
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import logging
 from logging.handlers import RotatingFileHandler

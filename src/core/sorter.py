@@ -9,7 +9,7 @@ This module provides functionality to:
 - Provide real-time CLI and logging feedback.
 """
 
-from __future__ import annotations
+from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import asyncio
 from collections import defaultdict
@@ -17,7 +17,7 @@ import logging
 import time
 from typing import List, Dict
 
-from aiopath import AsyncPath
+from .myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 from core.files import (
     get_file_extension,
@@ -69,7 +69,7 @@ async def read_folder(
                         "size": size,
                         "hash": hash_sum,
                         "modified": modified,
-                        "output_name": None
+                        "output_name": None,
                     }
                     files_map[ext].append(file_entry)
                     found_counter += 1
@@ -152,7 +152,8 @@ def resolve_duplicates_and_conflicts(
                     file_entry["output_name"] = None  # Mark to skip
                     skipped_duplicates += 1
                     logging.debug(
-                        "[RESOLVE] File '%s' is marked as duplicate.", file_entry["path"]
+                        "[RESOLVE] File '%s' is marked as duplicate.",
+                        file_entry["path"],
                     )
                 else:
                     # Conflict: same name, different hash
@@ -219,15 +220,19 @@ async def copy_files(
     failed_counter = 0
     semaphore = asyncio.Semaphore(5)  # limit how many coroutines run concurrently
 
-    async def copy_single_file(file_entry: Dict):
+    async def copy_single_file(file_entry: FileEntry):
         nonlocal copied_counter, failed_counter
 
         async with semaphore:
             # await asyncio.sleep(0.5)  # simulate delay
             ext = get_file_extension(file_entry["path"])
             safe_ext = ext.lstrip(".").replace(".", "_") or "no_extension"
-            output_path = target_dir_path / safe_ext / file_entry["output_name"]
+            output_name = file_entry["output_name"]
+            output_path = ""
             try:
+                if output_name is None:
+                    raise ValueError("output_name can't be None")
+                output_path = target_dir_path / safe_ext / output_name
                 await copy_file(file_entry["path"], output_path)
                 copied_counter += 1
                 print_dynamic_copy_update(copied_counter, total_files, start_time)
@@ -239,7 +244,7 @@ async def copy_files(
                     safe_ext,
                     file_entry["output_name"],
                 )
-            except OSError as exc:
+            except (OSError, ValueError) as exc:
                 failed_counter += 1
                 logging.debug(
                     "[COPY] ❌ Failed to copy from '%s' to '%s': %s",
