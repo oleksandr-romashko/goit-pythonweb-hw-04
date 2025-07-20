@@ -1,8 +1,9 @@
 {
+    // 🔤 Spell checker dictionary
     "cSpell.words": [
         "aiofiles",
-        "aiopath",
         "aioshutil",
+        "aiopath",
         "closefd",
         "colorama",
         "fspath",
@@ -12,5 +13,30 @@
         "redef",
         "subfolders",
         "tomli"
-    ]
+    ],
+    // 🧠 Python analysis & type checking
+    // "python.analysis.typeCheckingMode": "strict", // full Pylance strict mode
+    "python.analysis.diagnosticMode": "workspace", // check all project files
+    "python.analysis.exclude": [
+        "**/assert/**", // ignore assets from checks
+        "**/test_files/**"
+    ],
+    // 🗂 File explorer
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": false,
+        "**/dist": false,
+        "**/build": false,
+        "**/assets": false
+    },
+    // 🔎 Search bar
+    "search.exclude": {
+        "**/__pycache__": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        "**/assets/test_files": true,
+        "**/dist": false,
+        "**/build": false
+    },
 }
