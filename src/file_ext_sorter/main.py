@@ -1,6 +1,8 @@
 """Entry point for the async CLI file sorter application."""
 
-from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import (
+    annotations,
+)  # Enables lazy type evaluation (needed for forward references on Python <3.10)
 
 import asyncio
 import logging
@@ -10,7 +12,9 @@ from argparse import Namespace
 
 import colorama
 
-from file_ext_sorter.core.myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
+from file_ext_sorter.core.myaiopath import (
+    AsyncPath,
+)  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 from file_ext_sorter.cli.cli import parse_args
 from file_ext_sorter.cli.cli_output import show_interrupt_msg
@@ -92,6 +96,7 @@ async def run_file_sorter() -> None:
 
     logging.debug("[APP] APPLICATION STOPPED.")
 
+
 def main():
     """Main entry point"""
     try:
@@ -107,6 +112,7 @@ def main():
         logging.error("[APP] Unhandled exception: %s", e, exc_info=True)
         sys.exit(ExitCode.GENERAL_ERROR)
 
+
 # TODO for enhancements and UX improvements:
 # 🔴 Critical:
 #    - Fix launch settings for debugging for VS Code
@@ -120,8 +126,16 @@ def main():
 #    - Add feature: app arg --exclude to ignore certain file types (e.g., .png .js .log)
 #      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
 #    - Consider whitelist/blacklist (--include/--exclude) for the certain file types.
-#    - Add default values to source improve UX
-#      Consider setting default='.' for source (or output) as fallback to current directory.
+#    - Add more verbose output args option on grouped by extension, by showing exact files list:
+#          .json        3 files (2 conflicts resolved)
+#              data.json
+#              data(1).json
+#              data(2).json
+#    - Add default values to source (or output) improve UX
+#      Consider setting default='.' (current directory) for source (or output)
+#      as fallback to current directory.
+#      We may try checking if source/output is empty and where we are (pwd) and decide
+#      which (source or target) is expected to be current dir.
 #    - Adjustable concurrency with number of concurrent coroutines via --concurrency
 #      or auto (intelligent adaptation based on number of files, their total size,
 #      average size / max size per file).
