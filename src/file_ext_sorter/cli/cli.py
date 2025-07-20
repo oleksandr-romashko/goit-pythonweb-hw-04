@@ -37,21 +37,23 @@ def parse_args() -> Namespace:
             ]
         ),
     )
-    parser.add_argument("source", help="Source folder to scan and sort files from")
-    parser.add_argument("output", help="Output folder to sort files into")
+    parser.add_argument(
+        "source", help="folder to scan and sort files from (should exist)"
+    )
+    parser.add_argument("output", help="folder to sort files into (may not exist)")
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Preview the scan and sort result without copying any files.",
+        help="preview the scan and sort result without copying any files.",
     )
     parser.add_argument(
-        "--debug", action="store_true", help="Enable debug logging to console"
+        "--debug", action="store_true", help="enable debug logging to console"
     )
     parser.add_argument(
         "--version",
         action="version",
         version=f"v{metadata['version']}",
-        help="Show the version number and exit",
+        help="show the version number and exit",
     )
 
     # TODO: Add optional args in the future --exclude

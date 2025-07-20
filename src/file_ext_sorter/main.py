@@ -112,9 +112,7 @@ def main():
 
 
 # TODO for enhancements and UX improvements:
-# 🔴 Critical:
-#    - Fix launch settings for debugging for VS Code
-#    - Fix code example in help using substitution of actual app command name and not using python
+# 🔴 Critical: None
 # 🟡 Medium Priority:
 #    - Add testing, at least for core logic (may require breaking down some function
 #      into smaller ones)
