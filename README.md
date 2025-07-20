@@ -1,5 +1,3 @@
-
-
 # Fullstack Web Development with Python <!-- omit in toc -->
 
 ### [# goit-pythonweb-hw-04](https://github.com/topics/goit-pythonweb-hw-04) <!-- omit in toc -->
@@ -37,11 +35,11 @@ Scans a source folder and organizes files into subfolders in an output directory
     - [Duplicate Files vs Conflicts](#duplicate-files-vs-conflicts)
     - [File Extension Handling](#file-extension-handling)
     - [Files Without Extensions](#files-without-extensions)
-  - [⚙️ Setup \& Run Instructions](#️-setup--run-instructions)
+  - [⚙️ Setup \& Running Locally](#️-setup--running-locally)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
     - [Run the app locally (for the development)](#run-the-app-locally-for-the-development)
-  - [� Use as an Installed Package](#-use-as-an-installed-package)
+  - [📦 Use as an Installed Package](#-use-as-an-installed-package)
   - [📷 Solution Screenshots](#-solution-screenshots)
 - [📅 Roadmap](#-roadmap)
 - [🚀 Future Ideas](#-future-ideas)
@@ -91,37 +89,45 @@ Designed for efficient operation with large file sets using `asyncio`.
 
 ### 💭 Thought on edge cases
 
+Some file-handling situations don't have one "right" answer — only trade-offs. During development, a few decisions had to be made to keep the behavior consistent and predictable. This section explains how things like duplicates, extensions, and unnamed files are currently handled. These defaults aim to cover the most common use cases but may be improved or made configurable in future versions.
+
 #### Handling Strategy & Design Decisions
 
 Throughout development, several edge cases and ambiguous scenarios were encountered. In such cases, I made deliberate implementation choices based on practicality, expected behavior, and personal preference. These are considered reasonable defaults, though they may not suit every use case. Some of these behaviors may evolve in future versions or become configurable through CLI flags.
 
+> 📌 These handling strategies are subject to change in future versions based on user feedback, edge cases, or CLI configurability.
+
 #### Duplicate Files vs Conflicts
 
-Duplicates and filename conflicts are treated differently:
-* Duplicate detection is based on both filename and content hash (e.g., SHA256).
-    * If both match, files are considered identical duplicates.
-    * Only one file will be copied — the one with the latest modification time.
-* This helps avoid redundant copies while keeping the most recently updated file.
-* All conflicting files with different content (but same name) are handled via conflict resolution strategy (e.g., renamed with index).
+The app treats duplicates and name conflicts differently:
+
+* Duplicates are detected when both the filename and file content (via SHA256 hash) match.
+    * Only one copy is preserved — the one with the most recent modification time.
+* Conflicts happen when filenames match but content does not.
+    * These are resolved by renaming the incoming file with an index suffix (e.g., file(1).txt).
+
+This behavior avoids redundant copies while retaining the most recent version of identical files.
 
 #### File Extension Handling
 
-Some files have compound extensions like `.tar.xz`, `.toml.lock`, etc. Instead of just using the last part (e.g., `.xz`), the app treats the full extension (.tar.xz) as a meaningful unit:
-* Group folders are named using a safe format:
-    e.g., `.tar.xz` → `tar_xz`, `.toml.lock` → `toml_lock`
-* Leading dots are stripped, and dots are replaced with underscores to form valid folder names.
+Some files use compound extensions (e.g., `.tar.xz`, `.toml.lock`). To keep similar files grouped correctly:
+* The entire compound extension is used (not just the last part).
+* Group folders are named by replacing dots with underscores and removing leading dots:
+    * `.tar.xz` → `tar_xz`
+    * `.toml.lock` → `toml_lock`
+
+This avoids mixing unrelated file types and makes folder names filesystem-safe.
 
 #### Files Without Extensions
 
-Files with no standard extensions (e.g., `Dockerfile`, `LICENSE`) are grouped separately:
-* They are placed in a folder called `no_extension`.
+Files without extensions (e.g., `Dockerfile`, `LICENSE`) are grouped under:
+* `no_extension`
 
-Files starting with a dot, like `.gitignore` or `.env`, are also treated as extensionless files:
-* They are likewise placed in `no_extension`.
-* While debatable (since .env could be seen as a .env file), this strategy was chosen for consistency and simplicity.
-    This may change or become configurable later.
+Files starting with a dot (e.g., `.env`, `.gitignore`) are also considered extensionless and placed in the same group.
 
-### ⚙️ Setup & Run Instructions
+> ⚠️ While .env or .gitignore might look like they have extensions, they're treated as extensionless for consistency.This behavior may become configurable later.
+
+### ⚙️ Setup & Running Locally
 
 This guide explains how to set up the environment and use the CLI tool locally.
 
