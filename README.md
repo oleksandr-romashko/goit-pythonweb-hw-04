@@ -39,6 +39,7 @@ Scans a source folder and organizes files into subfolders in an output directory
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
     - [Run the app locally (for the development)](#run-the-app-locally-for-the-development)
+  - [🧰 Install Locally for Global Use](#-install-locally-for-global-use)
   - [📦 Use as an Installed Package](#-use-as-an-installed-package)
   - [📷 Solution Screenshots](#-solution-screenshots)
 - [📅 Roadmap](#-roadmap)
@@ -199,6 +200,27 @@ Help menu:
 ```bash
 poetry run file-ext-sorter --help
 ```
+
+### 🧰 Install Locally for Global Use
+
+If you'd like to test the app globally on your system without publishing to PyPI:
+
+1. **Build the wheel using Poetry**:
+    ```bash
+    poetry build
+    ```
+2. Install the built package locally using pip (exact file name may vary):
+    ```bash
+    pip install dist/file_ext_sorter-0.1.0-py3-none-any.whl
+    ```
+3. Run it globally from anywhere:
+    ```bash
+    file-ext-sorter ./assets/test_files/source/ ./assets/test_files/target
+    ```
+4. Uninstall when you're done:
+    ```bash
+    pip uninstall file-ext-sorter
+    ```
 
 ### 📦 Use as an Installed Package
 
