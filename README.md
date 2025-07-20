@@ -126,7 +126,7 @@ Files without extensions (e.g., `Dockerfile`, `LICENSE`) are grouped under:
 
 Files starting with a dot (e.g., `.env`, `.gitignore`) are also considered extensionless and placed in the same group.
 
-> ⚠️ While .env or .gitignore might look like they have extensions, they're treated as extensionless for consistency.This behavior may become configurable later.
+> ⚠️ Note: While .env or .gitignore might look like they have extensions, they're treated as extensionless for consistency.This behavior may become configurable later.
 
 ### ⚙️ Setup & Running Locally
 
@@ -209,10 +209,11 @@ If you'd like to test the app globally on your system without publishing to PyPI
     ```bash
     poetry build
     ```
-2. Install the built package locally using pip (exact file name may vary):
+2. Install the built package locally using pip:
     ```bash
     pip install dist/file_ext_sorter-0.1.0-py3-none-any.whl
     ```
+    > ⚠️ Note: Exact file name may vary, but should be something like `file_ext_sorter-*.whl`.
 3. Run it globally from anywhere:
     ```bash
     file-ext-sorter ./assets/test_files/source/ ./assets/test_files/target
