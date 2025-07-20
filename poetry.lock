@@ -86,10 +86,9 @@ files = [
 name = "types-colorama"
 version = "0.4.15.20240311"
 description = "Typing stubs for colorama"
-optional = true
+optional = false
 python-versions = ">=3.8"
-groups = ["main"]
-markers = "extra == \"dev\""
+groups = ["main", "dev"]
 files = [
     {file = "types-colorama-0.4.15.20240311.tar.gz", hash = "sha256:a28e7f98d17d2b14fb9565d32388e419f4108f557a7d939a66319969b2b99c7a"},
     {file = "types_colorama-0.4.15.20240311-py3-none-any.whl", hash = "sha256:6391de60ddc0db3f147e31ecb230006a6823e81e380862ffca1e4695c13a0b8e"},
@@ -114,4 +113,4 @@ dev = ["types-colorama"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.8, <3.15"
-content-hash = "604626cad9608103886980adec6b1e7f5c6ccf9344f65cabc99e72d12e6aaf8f"
+content-hash = "aa1b090318d30331e13b0e3353591899db5dc89a479180ae84716a9df996e8f4"

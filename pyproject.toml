@@ -2,12 +2,13 @@
 [project]
 name = "file-ext-sorter"
 version = "0.1.0"
-description = "A Python file sorter based on file extensions"
+description = "A Python CLI tool to sort files by their extension"
 readme = { file = "README.pypi.md", content-type = "text/markdown" }
 license = { text = "MIT" }
 authors = [
   { name = "Oleksandr Romashko", email = "alex.rmshk@gmail.com" }
 ]
+
 requires-python = ">=3.8, <3.15"
 
 dependencies = [
@@ -20,14 +21,18 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["types-colorama>=0.4.15.20240311"]
 
-[project.urls]
-Homepage = "https://github.com/oleksandr-romashko"
-
 [project.scripts]
 file-ext-sorter = "file_ext_sorter.main:main"
 
 [tool.poetry]
+# Only needed to set package inclusion path
 packages = [{ include = "file_ext_sorter", from = "src" }]
+
+[tool.poetry.group.dev.dependencies]
+types-colorama = "^0.4.15.20240311"
+
+[project.urls]
+Homepage = "https://github.com/oleksandr-romashko"
 
 [build-system]
 requires = ["poetry-core>=1.7.0"]
