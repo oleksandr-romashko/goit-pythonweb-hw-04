@@ -1,16 +1,116 @@
 {
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    // For more information about debugging, visit: https://code.visualstudio.com/docs/debugtest/debugging
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug using test files",
+            "name": "Debug: Help menu (Poetry)",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
             "console": "integratedTerminal",
-            "args": "./assets/test_files/source/ ./assets/test_files/output/"
+            "justMyCode": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "module": "file_ext_sorter",
+            "args": [
+                "--help",
+            ],
+        },
+        {
+            "name": "Debug: Using test files and Dry Run (Poetry)",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "module": "file_ext_sorter",
+            "args": [
+                "./assets/test_files/source/",
+                "./assets/test_files/output/",
+                "--dry-run"
+            ],
+        },
+        {
+            "name": "Debug: Using test files and Dry Run (verbose) (Poetry)",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "module": "file_ext_sorter",
+            "args": [
+                "./assets/test_files/source/",
+                "./assets/test_files/output/",
+                "--dry-run"
+            ],
+        },
+        {
+            "name": "Debug: Using test files (Poetry)",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "module": "file_ext_sorter",
+            "args": [
+                "./assets/test_files/source/",
+                "./assets/test_files/output/"
+            ],
+        },
+        {
+            "name": "Debug: Using test files (verbose) (Poetry)",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "module": "file_ext_sorter",
+            "args": [
+                "./assets/test_files/source/",
+                "./assets/test_files/output/"
+            ],
+        },
+        {
+            "name": "Debug: Show app version (Poetry)",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "module": "file_ext_sorter",
+            "args": [
+                "--version"
+            ],
         }
     ]
 }
