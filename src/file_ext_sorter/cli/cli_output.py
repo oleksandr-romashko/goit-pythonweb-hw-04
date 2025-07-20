@@ -6,7 +6,7 @@ such as spinners, status messages, and error notices. Designed for an enhanced
 terminal user experience with color and emoji indicators.
 """
 
-from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
 import time
 from typing import List, Optional, Dict
@@ -92,8 +92,6 @@ def show_mapping_summary(
     total_conflicts: int = 0
     total_bytes_to_copy: int = 0
 
-    time_to_execute_str = f"{time_to_execute:.2f}s"
-
     print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
 
     console_logger.info("📁 Files grouped by extension:")
@@ -132,9 +130,8 @@ def show_mapping_summary(
 
         per_ext_summary = ", ".join(filter(None, [duplicates_str, conflicts_str]))
         per_ext_summary_str = f" ({per_ext_summary})" if per_ext_summary else ""
-        console_logger.info(
-            f"  {extension.ljust(12)} {ext_total} files{per_ext_summary_str}",
-        )
+        log_msg = f"{extension.ljust(12)} {ext_total} files{per_ext_summary_str}"
+        console_logger.info("  %s", log_msg)
 
         total_files += ext_total
         total_duplicates += ext_duplicates
@@ -155,23 +152,34 @@ def show_mapping_summary(
     extras = []
     if total_duplicates:
         extras.append(
-            f"{total_duplicates} duplicate{'s' if total_duplicates != 1 else ''} to skip"
+            (
+                f"{Fore.YELLOW}{total_duplicates} duplicate{'s' if total_duplicates != 1 else ''} "
+                f"to skip{Style.RESET_ALL}"
+            )
         )
     if total_conflicts:
         extras.append(
-            f"{total_conflicts} conflict{'s' if total_conflicts != 1 else ''} resolved"
+            (
+                f"{Fore.GREEN}{total_conflicts} conflict{'s' if total_conflicts != 1 else ''} "
+                f"resolved{Style.RESET_ALL}"
+            )
         )
 
-    extras_str = f" ({', '.join(extras)})" if extras else ""
+    total_files_f_str = f"{Style.BRIGHT}{total_files} files{Style.RESET_ALL}"
+    time_to_execute_f_str = f"{time_to_execute:.2f}s"
+    extras_f_str = f" ({', '.join(extras)})" if extras else ""
     console_logger.info(
-        f"✅ Found {Style.BRIGHT}{total_files} files{Style.RESET_ALL} "
-        f"in {time_to_execute_str}{extras_str}",
+        "✅ Found %s in %s%s",
+        total_files_f_str,
+        time_to_execute_f_str,
+        extras_f_str,
     )
 
     # Size to copy
     if total_bytes_to_copy > 0:
         total_mb = total_bytes_to_copy / (1024 * 1024)
-        console_logger.info(f"📦 Estimated total to copy: {total_mb:.2f} MB")
+        total_mb_formatted_str = f"{total_mb:.2f}"
+        console_logger.info("📦 Estimated total to copy: %s MB", total_mb_formatted_str)
 
     # Extra empty line before further dynamic update
     print_line("")
@@ -209,14 +217,17 @@ def show_copy_summary(
         time_to_execute (float): Duration of the copy operation.
         error_count (int, optional): Number of copy failures.
     """
-    time_to_execute_str = f"{time_to_execute:.2f}s"
-    errors_str = f"\n⚠️  Failed to copy {error_count} files" if error_count else ""
     print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
+    total_files_f_str = f"{Style.BRIGHT}{files_number} files{Style.RESET_ALL}"
+    output_path_f_str = f"{Style.BRIGHT}{output_path}{Style.RESET_ALL}"
+    time_to_execute_str = f"{time_to_execute:.2f}s"
+    warning_str = f"\n⚠️  Failed to copy {error_count} files" if error_count else ""
     console_logger.info(
-        f"✅ Copied {Style.BRIGHT}{files_number} files{Style.RESET_ALL} "
-        f"into '{Style.BRIGHT}{output_path}{Style.RESET_ALL}' folder "
-        f"in {time_to_execute_str}"
-        f"{errors_str}"
+        "✅ Copied %s into '%s' folder in %s%s",
+        total_files_f_str,
+        output_path_f_str,
+        time_to_execute_str,
+        warning_str,
     )
 
 
@@ -226,10 +237,14 @@ def show_dry_run_msg(
     """Print a message indicating that the dry run was successful."""
     print_line("", end="", overwrite_prev_line=True)  # overwrite latest dynamic output
     console_logger.info("✅ Dry run complete. Copying skipped. No files were copied.")
+    total_files_f_str = f"{Style.BRIGHT}{total_files} files{Style.RESET_ALL}"
+    total_folders_f_str = f"{Style.BRIGHT}{total_folders} folders{Style.RESET_ALL}"
+    output_path_f_str = f"{Style.BRIGHT}{output_path_str}{Style.RESET_ALL}"
     console_logger.info(
-        f"☝️  Would copy {Style.BRIGHT}{total_files} files{Style.RESET_ALL} "
-        f"into {Style.BRIGHT}{total_folders} folders{Style.RESET_ALL} "
-        f"at '{Style.BRIGHT}{output_path_str}{Style.RESET_ALL}'."
+        "☝️  Would copy %s into %s at '%s'.",
+        total_files_f_str,
+        total_folders_f_str,
+        output_path_f_str,
     )
 
 

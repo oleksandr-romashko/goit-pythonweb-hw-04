@@ -5,11 +5,11 @@ Defines the FileEntry TypedDict used to represent file metadata during
 mapping, conflict resolution, and reporting.
 """
 
-from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
 from typing import TypedDict, Optional
 
-from .myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
+from .myaiopath import AsyncPath  # aiopath.AsyncPath replacement (support Python 3.8+)
 
 
 class FileEntry(TypedDict):

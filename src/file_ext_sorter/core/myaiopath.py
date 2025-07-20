@@ -9,35 +9,41 @@ Implements the exact features used in your project:
 You can gradually uncomment each method and test.
 """
 
-from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
-import aiofiles
 import asyncio
+
 from collections.abc import AsyncIterator
 from concurrent.futures import Executor
 import functools
 import os
 from pathlib import Path
-from typing import List, Optional, Callable, Union, Literal
+from typing import List, Optional, Callable, Union, Literal, AsyncContextManager, Any
 
-from typing import AsyncContextManager
+import aiofiles
 from aiofiles.threadpool.binary import AsyncBufferedReader
 from aiofiles.threadpool.text import AsyncTextIOWrapper
 
 if not hasattr(asyncio, "to_thread"):
     # asyncio.to_thread() was introduced in Python 3.9
     # here we backport asyncio.to_thread() to support it in Python 3.8
-    async def to_thread(func, /, *args, **kwargs):
+    async def to_thread(func: Callable[..., Any], /, *args: Any, **kwargs: Any) -> Any:
+        """Run func in a separate thread (backport for Python 3.8)."""
         loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(None, functools.partial(func, *args, **kwargs))
+        return await loop.run_in_executor(
+            None, functools.partial(func, *args, **kwargs)
+        )
+
     asyncio.to_thread = to_thread
+
 
 class AsyncPath:
     """
     A lightweight async wrapper for pathlib.Path with aiofiles integration.
-    
+
     Designed as a minimal replacement for aiopath.AsyncPath, with only project-specific methods.
     """
+
     def __init__(self, path: Union[str, Path]) -> None:
         self._path = Path(path)
 
@@ -47,7 +53,7 @@ class AsyncPath:
 
     def __str__(self) -> str:
         return str(self._path)
-    
+
     def __repr__(self) -> str:
         """Represent the AsyncPath as a string for debugging."""
         return f"AsyncPath({self._path!r})"
@@ -61,13 +67,14 @@ class AsyncPath:
 
     @property
     def parent(self) -> AsyncPath:
+        """Return the parent directory."""
         return AsyncPath(self._path.parent)
-    
+
     @property
     def suffixes(self) -> List[str]:
         """Return list of file suffixes (e.g. ['.tar', '.gz'])."""
         return self._path.suffixes
-    
+
     @property
     def name(self) -> str:
         """The final path component (e.g. filename or dirname)."""
@@ -82,6 +89,7 @@ class AsyncPath:
         return await asyncio.to_thread(self._path.exists)
 
     async def is_file(self) -> bool:
+        """Check if the path is a file."""
         return await asyncio.to_thread(self._path.is_file)
 
     async def is_dir(self) -> bool:

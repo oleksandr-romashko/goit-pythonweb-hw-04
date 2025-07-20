@@ -1,8 +1,6 @@
 """Entry point for the async CLI file sorter application."""
 
-from __future__ import (
-    annotations,
-)  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
 import asyncio
 import logging

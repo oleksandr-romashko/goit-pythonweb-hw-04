@@ -5,15 +5,15 @@ Provides async functions to get file extensions, copy files,
 and validate source and output directory paths.
 """
 
-from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
 import logging
 
 import aioshutil
 
-from .myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
-
 from file_ext_sorter.utils.logger_config import get_console_logger
+
+from .myaiopath import AsyncPath  # aiopath.AsyncPath replacement (support Python 3.8+)
 
 
 console_logger = get_console_logger()
@@ -108,7 +108,10 @@ async def validate_output_dir(path: AsyncPath, origin_path_str: str) -> bool:
         )
     else:
         logging.info(
-            "[VALIDATION] Output path '%s' not found at '%s' and new output folder will be created.",
+            (
+                "[VALIDATION] Output path '%s' not found at '%s' "
+                "and new output folder will be created."
+            ),
             origin_path_str,
             path,
         )

@@ -5,9 +5,7 @@ Uses the built-in `tomllib` module (Python 3.11+) to read version, author,
 email, description, urls, etc. from the `pyproject.toml` sections.
 """
 
-from __future__ import (
-    annotations,
-)  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
 import logging
 from typing import TypedDict

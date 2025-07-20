@@ -4,7 +4,7 @@ Command handlers for the CLI.
 Defines and manages CLI subcommands and their logic.
 """
 
-from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
 from argparse import Namespace
 

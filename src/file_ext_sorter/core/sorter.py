@@ -9,15 +9,13 @@ This module provides functionality to:
 - Provide real-time CLI and logging feedback.
 """
 
-from __future__ import annotations  # Enables lazy type evaluation (needed for forward references on Python <3.10)
+from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
 
 import asyncio
 from collections import defaultdict
 import logging
 import time
 from typing import List, Dict
-
-from .myaiopath import AsyncPath  # custom replacement for aiopath.AsyncPath to support Python 3.8+
 
 from file_ext_sorter.core.files import (
     get_file_extension,
@@ -32,6 +30,8 @@ from file_ext_sorter.cli.cli_output import (
     show_copy_summary,
 )
 from file_ext_sorter.utils.hash_calculator import get_file_hash
+
+from .myaiopath import AsyncPath  # replacement aiopath.AsyncPath (support Python 3.8+)
 
 
 async def read_folder(
