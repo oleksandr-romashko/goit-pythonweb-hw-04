@@ -2,14 +2,15 @@
     // 🔤 Spell checker dictionary
     "cSpell.words": [
         "aiofiles",
-        "aioshutil",
         "aiopath",
+        "aioshutil",
         "closefd",
         "colorama",
         "fspath",
         "levelname",
         "levelno",
         "myaiopath",
+        "pypi",
         "redef",
         "subfolders",
         "tomli"
