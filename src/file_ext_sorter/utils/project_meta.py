@@ -10,6 +10,17 @@ from typing import TypedDict
 
 
 class ProjectMetadata(TypedDict):
+    """
+    Typed dictionary representing project metadata retrieved from installed package.
+
+    Fields:
+        version (str): The installed version of the package.
+        author (str): The author's name.
+        email (str): The author's email address.
+        description (str): A short summary of the project.
+        homepage (str): The project's homepage URL.
+    """
+
     version: str
     author: str
     email: str
