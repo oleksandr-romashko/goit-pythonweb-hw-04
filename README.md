@@ -7,7 +7,7 @@
 </p>
 
 
-## file-ext-sorter - _a Python CLI tool to sort files by extension_ <!-- omit in toc -->
+## 🔀 file-ext-sorter - _a Python CLI tool to sort files by extension_ <!-- omit in toc -->
 
 Scans a source folder and organizes files into subfolders in an output directory based on their file extensions.
 
