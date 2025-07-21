@@ -4,6 +4,11 @@ A fast and flexible CLI tool to sort files into folders based on file extensions
 
 Organize messy download folders, group media by type, or archive project files — all with a single command.
 
+
+<p align="center">
+  <img src="https://github.com/oleksandr-romashko/goit-pythonweb-hw-04/blob/main/assets/project-showcase.png?raw=true" alt="Project showcase image" width="700">
+</p>
+
 [![PyPI version](https://img.shields.io/pypi/v/file-ext-sorter)](https://pypi.org/project/file-ext-sorter/)
 [![License](https://img.shields.io/github/license/oleksandr-romashko/goit-pythonweb-hw-04)](https://github.com/oleksandr-romashko/goit-pythonweb-hw-04/blob/main/LICENSE)
 
