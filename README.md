@@ -138,7 +138,6 @@ Before running the script, make sure the following are installed:
 
 - **[Python 3.8+](https://www.python.org/downloads/)** — Required to run the script.
 - (Recommended) **[Poetry](https://python-poetry.org/)** — To install dependencies and run in a virtual environment.
-- (Optional) **Git** — To clone the repository.
 - (Optional) **[Git](https://git-scm.com/downloads)** — To clone [the repository](https://github.com/oleksandr-romashko/goit-pythonweb-hw-04), version control and development.
 * (Optional) **[VS Code](https://code.visualstudio.com/download)** or another IDE — Recommended for browsing and editing the project source code and overall development. VS Code is recommended as the project has settings and debug launch scripts specifically for VS Code.
 
@@ -231,9 +230,17 @@ For usage instructions, see the [PyPI README](./README.pypi.md) or visit the [pr
 
 ### 📷 Solution Screenshots
 
-Some screenshot of the the solution:
+Help menu:
 
-![example usage](./assets/results/example-usage.png)
+![help menu screenshot](./assets/results/example-usage-help.png)
+
+Normal run using test files:
+
+![normal run screenshot](./assets/results/example-usage-test-files.png)
+
+Dry-run (preview the scan and sort result without copying) using test files:
+
+![dry-run screenshot](./assets/results/example-usage-test-files-dry-run.png)
 
 ## 📅 Roadmap
 
