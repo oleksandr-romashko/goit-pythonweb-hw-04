@@ -1,26 +1,15 @@
 """
-Utility to extract project metadata from `pyproject.toml`.
+Utility to extract project metadata using importlib.metadata.
 
-Uses the built-in `tomllib` module (Python 3.11+) to read version, author,
-email, description, urls, etc. from the `pyproject.toml` sections.
+This version avoids runtime dependency on pyproject.toml by using
+the installed distribution metadata.
 """
 
-from __future__ import annotations  # Enables lazy type evaluation (Python <3.10)
-
-import logging
+from importlib.metadata import metadata, PackageNotFoundError
 from typing import TypedDict
-
-try:
-    # Note: `tomllib` is only available in Python 3.11+ (as part of Python default modules).
-    import tomllib  # type: ignore[import-not-found]
-except ModuleNotFoundError:
-    # For Python <3.11, `tomli` is used instead (declared in pyproject.toml).
-    import tomli as tomllib  # type: ignore[no-redef]
 
 
 class ProjectMetadata(TypedDict):
-    """Project metadata parsed from pyproject.toml."""
-
     version: str
     author: str
     email: str
@@ -28,34 +17,29 @@ class ProjectMetadata(TypedDict):
     homepage: str
 
 
-def get_project_metadata() -> ProjectMetadata:
+def get_project_metadata(distribution_name: str = "file-ext-sorter") -> ProjectMetadata:
     """
-    Parse `pyproject.toml` and return relevant project metadata.
+    Return relevant metadata for the installed distribution.
+
+    Args:
+        distribution_name (str): The package name as declared in pyproject.toml.
 
     Returns:
-        A dictionary containing version, author, email, description, and homepage, with keys:
-            - version: Project version (str)
-            - author: Author's name (str)
-            - email: Author's email (str)
-            - description: Project description (str)
-            - homepage: Project homepage URL (str)
+        ProjectMetadata: A dict containing version, author, email, description, homepage.
 
     Raises:
-        RuntimeError: If the file is missing, malformed, or required keys are not found.
+        RuntimeError: If the metadata cannot be found (e.g., not installed).
     """
     try:
-        with open("pyproject.toml", "rb") as fh:
-            data = tomllib.load(fh)
-            project = data["project"]
-            author = project.get("authors", [{}])[0]
-            homepage = data.get("project", {}).get("urls", {}).get("Homepage", "")
-            return {
-                "version": project["version"],
-                "author": author.get("name", "Unknown"),
-                "email": author.get("email", ""),
-                "description": project.get("description", ""),
-                "homepage": homepage,
-            }
-    except (FileNotFoundError, tomllib.TOMLDecodeError, KeyError) as exc:
-        logging.error("Cannot read metadata from pyproject.toml: %s", exc)
-        raise RuntimeError(f"Cannot read metadata from pyproject.toml: {exc}") from exc
+        dist_meta = metadata(distribution_name)
+        return {
+            "version": dist_meta.get("Version", "unknown"),
+            "author": dist_meta.get("Author", "unknown"),
+            "email": dist_meta.get("Author-email", ""),
+            "description": dist_meta.get("Summary", ""),
+            "homepage": dist_meta.get("Home-page", ""),
+        }
+    except PackageNotFoundError as exc:
+        raise RuntimeError(
+            f"Cannot read installed metadata for package '{distribution_name}'."
+        ) from exc
