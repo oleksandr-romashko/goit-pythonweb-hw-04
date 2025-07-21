@@ -118,6 +118,12 @@ def main():
 #      into smaller ones)
 #    - Package on PyPI for distribution. Purpose: Broader usage, distribution with
 #      global command registration in user system. Purpose: Quality-of-life for frequent users.
+#    - Handle edge case: Source and output path are the same.
+#      This may result in file copying into its own resolved path.
+#      OS might allow it silently, but we should detect and skip these.
+#      Purpose: Avoid in-place overwrite. Consistent dry-run and copy counts
+#      Idea: Add warning if detected, or require explicit user flag like --allow-same-path.
+#      Note: This will also clean up inconsistency in dry-run vs real copy counts.
 # 🟢 Nice to Have:
 #    - Add feature: app arg --exclude to ignore certain file types (e.g., .png .js .log)
 #      or regexp. Purpose: Control over what to sort (copy) and what to ignore.
@@ -152,6 +158,10 @@ def main():
 #      (user centric, no need to check logs/app.log file - inconvenient)
 #      (Caution: may have many lines, so maybe just print last X lines/pages?)
 #      Note: currently is solved by --debug arg, but works for current run.
+#    - Improve dry-run accuracy: Skip planned copies where src and dst paths are identical.
+#      Currently dry-run includes such files in estimated copy count, but real copy skips/fails them.
+#      Purpose: UX consistency, accurate reporting.
+#      Suggestion: During planning, if os.path.abspath(src) == os.path.abspath(dst), skip early.
 #    - Add feature --verbose - CLI flag like to toggle DEBUG mode dynamically.
 # ⬤ Skipped:
 #    - Simple progress bar while copying █▒▒▒▒▒▒▒▒▒10%. Helps UX and perception of progress.
