@@ -12,7 +12,7 @@ from file_ext_sorter.utils.project_meta import get_project_metadata
 
 from .parser import CustomArgumentParser
 
-metadata = get_project_metadata()
+metadata: dict = get_project_metadata()
 
 
 def parse_args() -> Namespace:
