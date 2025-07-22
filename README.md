@@ -21,7 +21,7 @@ Organize messy download folders, group media by type, quickly analyze and find f
 - 🚀 **Asynchronous performance**
 - 🎒 **Minimal and portable**: no databases, no external frameworks
 - 🐍 **Compatible with Python 3.8-3.14+**
-- 📦 **PyPI**: install globally and use as a CLI command
+- 📦 **PyPI**: install globally and use as a CLI command from [Python Package Index](https://pypi.org/project/file-ext-sorter/)
 
 <p align="center">
   <img src="./assets/project-showcase.png" alt="file-ext-sorter sorting preview showcase (screenshot)" width="700">
@@ -46,7 +46,7 @@ Organize messy download folders, group media by type, quickly analyze and find f
   - [🧰 Install Locally for Global Use](#-install-locally-for-global-use)
   - [📦 Use as an Installed Package](#-use-as-an-installed-package)
   - [📷 Solution Screenshots](#-solution-screenshots)
-- [� Changelog](#-changelog)
+- [📄 Changelog](#-changelog)
 - [📅 Roadmap](#-roadmap)
 - [🚀 Future Ideas](#-future-ideas)
 - [🤝 How to Contribute](#-how-to-contribute)
@@ -230,9 +230,9 @@ If you'd like to test the app globally on your system without publishing to PyPI
 
 ### 📦 Use as an Installed Package
 
-This project is [published on PyPI]().
+This project is [published on PyPI](https://pypi.org/project/file-ext-sorter/).
 
-For usage instructions, see the [PyPI README](./README.pypi.md) or visit the [project page on PyPI]().
+For usage instructions, see the [PyPI README](./README.pypi.md) or visit the [project page on PyPI](https://pypi.org/project/file-ext-sorter/).
 
 ### 📷 Solution Screenshots
 
