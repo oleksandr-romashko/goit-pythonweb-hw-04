@@ -96,12 +96,34 @@ file-ext-sorter --help
 <details> <summary>Click to expand help output</summary>
 
 ```bash
-Usage: file-ext-sorter <source_dir> <output_dir> [--dry-run] [--debug]
+ 
+🔀 FILE SORTER
+
+Sort and organize your files by extension
+
+v0.1.0
+
+This CLI tool scans a source directory and copies files into subfolders in the output directory based on file extensions.
+
+Notes on terminology:
+  duplicate - file with the same file name and content (skipped from copying)
+  conflict - file with the same file name and different content (resolved by new name)
+
+Usage:    file-ext-sorter <source> <output>
+Example:  file-ext-sorter ./path/to/source/folder ./path/to/output/folder
+
+Positional arguments:
+  source  folder to scan and sort files from (should exist)
+  output  folder to sort files into (may not exist)
 
 Options:
-  --dry-run     Show planned file operations without copying anything.
-  --debug       Enable verbose debug output.
-  -h, --help    Show this help message and exit.
+  -h, --help  show this help message and exit
+  --dry-run   preview the scan and sort result without copying any files.
+  --debug     enable debug logging to console
+  --version   show the version number and exit
+
+Created by Oleksandr Romashko
+https://github.com/oleksandr-romashko
 ```
 </details> 
 
