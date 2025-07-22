@@ -121,9 +121,6 @@ Options:
   --dry-run   preview the scan and sort result without copying any files.
   --debug     enable debug logging to console
   --version   show the version number and exit
-
-Created by Oleksandr Romashko
-https://github.com/oleksandr-romashko
 ```
 </details> 
 
