@@ -12,6 +12,13 @@ authors = [
 requires-python = ">=3.8, <3.15"
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
     "Environment :: Console"
 ]
@@ -37,7 +44,7 @@ packages = [{ include = "file_ext_sorter", from = "src" }]
 types-colorama = "^0.4.15.20240311"
 
 [project.urls]
-Homepage = "https://github.com/oleksandr-romashko"
+Homepage = "https://github.com/oleksandr-romashko/goit-pythonweb-hw-04"
 Issues = "https://github.com/oleksandr-romashko/goit-pythonweb-hw-04/issues"
 
 [build-system]

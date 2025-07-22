@@ -7,20 +7,24 @@
 </p>
 
 
-## 🔀 file-ext-sorter - _a Python CLI tool to sort files by extension_ <!-- omit in toc -->
+## 🔀 file-ext-sorter <!-- omit in toc -->
 
-Scans a source folder and organizes files into subfolders in an output directory based on their file extensions.
+A command-line tool that groups files into folders based on their file extensions.
+
+Organize messy download folders, group media by type, quickly analyze and find files by type or archive project files — all with a single command.
 
 #### ✨ Main Features <!-- omit in toc -->
 
-- 🔀 **Automatic file categorization** based on file extensions
-- 🚀 **Asynchronous performance** using `asyncio`, `aiofiles`, and `aioshutil`
+- 🔀 **Automatic file grouping** by file extensions:
+    - 🗐 Handles duplicate names and naming conflicts
+    - 👁️‍🗨️ Supports dry-run mode for safe preview
+- 🚀 **Asynchronous performance**
 - 🎒 **Minimal and portable**: no databases, no external frameworks
-- 🐍 **Compatible with Python 3.8–3.14+** (supports `asyncio.to_thread` polyfill)
+- 🐍 **Compatible with Python 3.8-3.14+**
 - 📦 **PyPI**: install globally and use as a CLI command
 
 <p align="center">
-  <img src="./assets/project-showcase.png" alt="Project showcase image" width="700">
+  <img src="./assets/project-showcase.png" alt="file-ext-sorter sorting preview showcase (screenshot)" width="700">
 </p>
 
 
@@ -42,9 +46,11 @@ Scans a source folder and organizes files into subfolders in an output directory
   - [🧰 Install Locally for Global Use](#-install-locally-for-global-use)
   - [📦 Use as an Installed Package](#-use-as-an-installed-package)
   - [📷 Solution Screenshots](#-solution-screenshots)
+- [� Changelog](#-changelog)
 - [📅 Roadmap](#-roadmap)
 - [🚀 Future Ideas](#-future-ideas)
 - [🤝 How to Contribute](#-how-to-contribute)
+- [💡 Contributing](#-contributing)
 - [📄 License](#-license)
 - [🙏 Acknowledgements](#-acknowledgements)
 
@@ -162,7 +168,7 @@ Before running the script, make sure the following are installed:
 Command structure:
 
 ```bash
-poetry run file-ext-sorter /path/to/source> /path/to/output
+poetry run file-ext-sorter /path/to/source /path/to/output
 ```
 
 Example Usage:
@@ -176,20 +182,20 @@ This will:
 4. Copy all files to `./assets/test_files/output/`, organized into subfolders like:
     ```bash
     ./assets/test_files/output/
-    ├── css
+    ├── css/
     │   └── style.css
-    ├── json (2 conflicts resolved)
+    ├── json/ (2 conflicts resolved)
     │   ├── data.json
     │   ├── data(1).json
     │   └── data(2).json
-    ├── py (2 duplicates, 1 conflict resolved)
+    ├── py/ (2 duplicates, 1 conflict resolved)
     │   ├── __init__.py
     │   ├── __init__(1).py
     │   └── main.py
-    ├── toml_lock (1 conflict resolved)
+    ├── toml_lock/ (1 conflict resolved)
     │   ├── pyproject.toml.lock
     │   └── pyproject(1).toml.lock
-    └── no_extension (2 conflicts resolved)
+    └── no_extension/ (2 conflicts resolved)
         ├── .gitignore
         ├── .gitignore(1)
         ├── Dockerfile
@@ -230,17 +236,22 @@ For usage instructions, see the [PyPI README](./README.pypi.md) or visit the [pr
 
 ### 📷 Solution Screenshots
 
-Help menu:
+**1. Help menu** (`--help`)
 
 ![help menu screenshot](./assets/results/example-usage-help.png)
 
-Normal run using test files:
+**2. Run on sample files** (sample files are provided within repository, located in [assets/test_files/](./assets/test_files/) directory)
 
 ![normal run screenshot](./assets/results/example-usage-test-files.png)
 
-Dry-run (preview the scan and sort result without copying) using test files:
+**3. Dry-run mode** (preview the scan and sort result without actual files copying)
 
 ![dry-run screenshot](./assets/results/example-usage-test-files-dry-run.png)
+
+## 📄 Changelog
+
+See [GitHub Releases](https://github.com/oleksandr-romashko/goit-pythonweb-hw-04/releases) for version history.
+
 
 ## 📅 Roadmap
 
@@ -297,6 +308,11 @@ If you have suggestions or need specific functionality, feel free to [open an is
 ## 🤝 How to Contribute
 
 Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
+
+## 💡 Contributing
+
+Ideas, bugs, or feature requests? Pull requests are welcome!
+For major changes, please open an issue first to discuss what you'd like to change.
 
 ## 📄 License
 
