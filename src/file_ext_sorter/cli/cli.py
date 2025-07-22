@@ -56,13 +56,4 @@ def parse_args() -> Namespace:
         help="show the version number and exit",
     )
 
-    # TODO: Add optional args in the future --exclude
-    # *: --exclude - Possibility to exclude certain file types
-    # parser.add_argument(
-    #     "--exclude",
-    #     nargs="+",
-    #     metavar="EXT",
-    #     help="Exclude files with these extensions from being sorted (e.g. .txt .jpg)"
-    # )
-
     return parser.parse_args()
