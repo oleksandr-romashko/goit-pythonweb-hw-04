@@ -139,15 +139,15 @@ pip uninstall file-ext-sorter
 
 **1. Help menu** (`--help`)
 
-![help menu screenshot](./assets/results/example-usage-help.png)
+![help menu screenshot](https://github.com/oleksandr-romashko/goit-pythonweb-hw-04/raw/main/assets/results/example-usage-help.png)
 
 **2. Run on sample files**
 
-![normal run screenshot](./assets/results/example-usage-test-files.png)
+![normal run screenshot](https://github.com/oleksandr-romashko/goit-pythonweb-hw-04/raw/main/assets/results/example-usage-test-files.png)
 
 **3. Dry-run mode** (preview the scan and sort result without actual files copying)
 
-![dry-run screenshot](./assets/results/example-usage-test-files-dry-run.png)
+![dry-run screenshot](https://github.com/oleksandr-romashko/goit-pythonweb-hw-04/raw/main/assets/results/example-usage-test-files-dry-run.png)
 
 ## 🐛 Report Issues
 
